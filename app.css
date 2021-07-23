@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  /* background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898; */
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+#app,
+#viewport {
+  display: block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#viewport {
+  --perspective: 400px;
+  perspective: var(--perspective);
+  perspective-origin: center;
+  overflow: auto;
+}
+
+#canvas {
+  position: absolute;
+  height: calc(100% * 2);
+  width: calc(100% * 2);
+  
+  transform-style: preserve-3d;
+  transform-origin: center;
+  transition: transform .2s ease-out;
+}
+
+h1, div {
+  font-size: 3rem;
+  transition: font-size 1s ease; 
+  will-change: font-size; 
+  user-select: none;
+  /* transform-style: preserve-3d; */
+}
