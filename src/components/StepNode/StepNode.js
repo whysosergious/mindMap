@@ -1,6 +1,5 @@
 import { _gc, _proxies } from '/gc.js';
-const { watchEffect } = Vue;
-
+// const { watchEffect } = Vue;
 
 // scoped styles
 const scopedCSS = (id, vals) => `
@@ -25,8 +24,8 @@ export default {
     // temp obj simulating fetched values
     const data = {
       pos: {
-        y: 400 * 2,
-        x: 600 * 2,
+        y: 930,
+        x: 1371,
         z: 70,
         unit: 'px'
       },
@@ -38,7 +37,6 @@ export default {
     }
 
     
-
     // scoped css values
     const cssVals = {
       fontSize: .8,
@@ -55,63 +53,74 @@ export default {
       // data
       text: 'Step Node',
       data,
-      mod: () => 1 - ((props.z + props.cz) / (_gc.viewport.perspective / 100) / 100), // modifier for adjustment for 3d perspective
+      mod: () => 1 - ((props.z + props.cz) / (_gc.viewport.perspective / 100) / 100), // adjustment modifier for 3d perspective
 
       // css
       scopedCSS, cssVals
     }
   },
-  template: await _gc.getTemplate('StepNode'),
+  template: await _gc.getTemplate('StepNode', true),
   methods: {
     updateCss() {
       const { id, scopedCSS, cssVals } = this;
       _proxies.scopedCSS.val = { id, css: scopedCSS(id, cssVals) };
     },
-    updatePos(applyMod=true, a=true) {
-      const { $el, props, mod, data } = this;
-      let m = applyMod ? mod() : 1;
-      console.log(m, data.pos.x, {$el}, $el.getBoundingClientRect())
+    updatePos() {
+      const { $el, props, data: { pos } } = this;
       
-      a && ($el.style.transform = `translate3d(${ data.pos.x*m }${ data.pos.unit }, ${ data.pos.y*m }${ data.pos.unit }, ${ props.z }${ data.pos.unit })`);
+      $el.style.transform = `translate3d(${ pos.x }${ pos.unit }, ${ pos.y }${ pos.unit }, ${ props.z }${ pos.unit })`;
     },
-    w() {
-      watchEffect(() => {
-        console.log('g', this.props.cz)
-        this.props.cz;
-        this.updatePos(true, false);
-      });
-    },
+    // w() {
+    //   watchEffect(() => {
+    //     this.props.cz;
+    //   });
+    // },
 
     // event handlers
     handleGrab(ev) {
-      this.grabOrigin = {
-        y: this.data.pos.y - ev.y,
-        x: this.data.pos.x - ev.x,
-        scrollY: this.$root.$el.scrollTop,
-        scrollX: this.$root.$el.scrollLeft
+      // latest & original values: { coords, scroll offsets }
+      this.lv = {
+        y: 0,
+        x: 0,
+        oy: ev.y,
+        ox: ev.x,
+        soy: 0,
+        sox: 0,
+        osoy: viewport.scrollTop,
+        osox: viewport.scrollLeft
       }
-      console.log(ev)
+      
       window.addEventListener('mousemove', this.handleMove);
-      this.$root.$el.addEventListener('scroll', this.handleScroll);
       window.addEventListener('mouseup', this.handleRelease, { once: true });
+      viewport.addEventListener('scroll', this.handleScroll, { passive: false });
     },
     handleMove(ev)  {
       ev.preventDefault();
-      this.data.pos.y = ev.y + this.grabOrigin.y;
-      this.data.pos.x = ev.x + this.grabOrigin.x;
+      let { data, mod, lv } = this;
+      mod = mod();
+
+      data.pos.y -= (lv.oy - ev.y)*mod - lv.y;
+      data.pos.x -= (lv.ox - ev.x)*mod - lv.x;
+      lv.y = (lv.oy - ev.y)*mod;
+      lv.x = (lv.ox - ev.x)*mod;
 
       this.updatePos();
     },
-    handleScroll(ev)  {
-      // TODO safeguard for scrolling during item drag, below is a bad solution
-      // this.data.pos.y = this.$root.$el.scrollTop + this.grabOrigin.scrollY;
-      // this.data.pos.x = this.$root.$el.scrollLeft + this.grabOrigin.scrollX;
+    handleScroll(ev) {
+      const { data, lv } = this;
+      const { scrollTop, scrollLeft } = ev.target;
 
-      // this.updatePos(false);
+      data.pos.y -= lv.osoy - scrollTop - lv.soy;
+      data.pos.x -= lv.osox - scrollLeft - lv.sox;
+      lv.soy = lv.osoy - scrollTop;
+      lv.sox = lv.osox - scrollLeft;
+
+      this.updatePos();
     },
+  
     handleRelease(ev) {
       window.removeEventListener('mousemove', this.handleMove);
-      this.$root.$el.removeEventListener('scroll', this.handleScroll);
+      viewport.removeEventListener('scroll', this.handleScroll, { passive: false });
     }
   },
   beforeMount() {
@@ -119,9 +128,5 @@ export default {
   },
   mounted() {
     this.updatePos();
-    // console.log(this.w());
-    // console.log(this.$el);
-  },
-  
-
+  }
 }

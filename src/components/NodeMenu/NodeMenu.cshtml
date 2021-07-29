@@ -1,0 +1,26 @@
+<div id="nodemenu" :class="altClass" :style="mousePos">
+  <div class="title-row fl-c">
+    <h4>Node menu</h4>
+  </div>
+  <div class="node-tabs brdr-xs-t">
+    <div class="tab full-hw fl-c active">
+      <h4>All</h4>
+    </div>
+    <div class="tab full-hw fl-c">
+      <h4>Custom</h4>
+    </div>
+  </div>
+  <div class="search-bar brdr-xs-t fl-c">
+    <img src="src/assets/vector/files/ui/search.svg" alt="ui icon"/>
+    <input type="text" placeholder="Search" />
+  </div>
+  <div class="node-grid brdr-xs-t">
+    <div class="node fl-c" v-for="(node, index) in nodes" :key="index">
+      <img :src="node.icon" alt="node icon" />
+      <h5>{{ node.label }}</h5>
+    </div>
+  </div>
+  <div class="bottom-row brdr-xs-t fl-c">
+    <h4>Nothing here for now</h4>
+  </div>
+</div>

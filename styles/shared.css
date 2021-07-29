@@ -3,3 +3,32 @@
   justify-content: center;
   align-items: center;
 }
+
+.full-h {
+  height: 100% !important;  /* I dont like it */
+}
+
+.full-w {
+  width: 100%;
+}
+
+.full-hw {
+  height: 100%;
+  width: 100%;
+}
+
+.brdr-xs-t {
+  border-top: 1px solid rgb(255, 197, 231);
+}
+
+.m-s-r {
+  margin-right: 7px;
+}
+
+
+/* canvas */
+.cover-canvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}

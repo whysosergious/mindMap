@@ -1,0 +1,20 @@
+<svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <template v-for="(line, index) in lines" :key="index">
+    <g class="node-path" :class="line.altClass">
+      <path stroke="grey" stroke-width="3" :id="line.id" :d="`M ${ line.x } ${ line.y } ${ line.vertex() } L ${ line.ex } ${ line.ey }`" />
+      <g v-for="(hitbox, index) in line.hitboxes" :key="index">
+        <path @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="24" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
+      </g>
+      <circle @mousedown.left.stop="moveStartPoint(line)" :cx="line.x" :cy="line.y" r="7" fill="darkgrey" />
+      <circle @mousedown.left.stop="deleteLine(line.id)" :cx="line.deleteBtn.x" :cy="line.deleteBtn.y" r="7" fill="red" />
+      <circle @mousedown.left.stop="moveEndPoint(line)" :cx="line.ex" :cy="line.ey" r="7" fill="darkgrey" />
+      <template v-for="(point, index) in line.points" :key="index">
+        <g class="point-group">
+          <circle :cx="point.x" :cy="point.y" r="26" fill="#57105205" />
+          <circle @mousedown.left.stop="initMovePoint(line, point)" :id="point.id" :cx="point.x" :cy="point.y" r="8" fill="darkgrey" />
+          <circle class="point-option" @mousedown.left.stop="deletePoint(line, index)" :cx="point.x + 12" :cy="point.y - 12" r="5" fill="red" />
+        </g>
+      </template>
+    </g>
+  </template>
+</svg>

@@ -1,0 +1,9 @@
+<div id="viewport">
+  <div id="canvas" @click.passive="closeOpenWindows">
+    <node-lines></node-lines>
+    <step-node :z="30" :cz="offset.canZ" bg="blue"></step-node>
+    <step-node :z="60" :cz="offset.canZ" bg="red"></step-node>
+  </div>
+  <interface></interface>
+  <node-menu :show="nodeMenu.show" :x="nodeMenu.x" :y="nodeMenu.y"></node-menu>
+</div>

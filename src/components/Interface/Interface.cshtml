@@ -1,0 +1,68 @@
+<menu id="interface">
+  <div id="topbar" class="ui-wrapper full-h">
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/save.svg" alt="ui icon"/>
+    </div>
+        <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/open.svg" alt="ui icon"/>
+    </div>
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/undo.svg" alt="ui icon"/>
+    </div>
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/redo.svg" alt="ui icon"/>
+    </div>
+  </div>
+  <div id="toprightbar" class="full-h">
+    <div class="ui-wrapper m-s-r">
+      <div class="button fl-c">
+        <img src="src/assets/vector/files/ui/help.svg" alt="ui icon"/>
+      </div>
+    </div>
+    <div class="ui-wrapper">
+      <div class="button fl-c">
+        <img src="src/assets/vector/files/ui/print.svg" alt="ui icon"/>
+      </div>
+    </div>
+  </div>
+  <!--
+  <div id="extras" class="ui-wrapper full-hw">
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/help.svg" alt="ui icon"/>
+    </div>
+  </div>
+  -->
+  <div id="toolbar" class="ui-wrapper full-w">
+    <div @click="selectTool('cursor')" class="button fl-c" :class="ui.activeTool === 'cursor' && 'active'">
+      <img src="src/assets/vector/files/ui/cursor.svg" alt="ui icon"/>
+    </div>
+    <div @click="openNodeMenu" class="button fl-c">
+      <img src="src/assets/vector/files/ui/add.svg" alt="ui icon"/>
+    </div>
+    <div @click="selectTool('line')" class="button fl-c" :class="ui.activeTool === 'line' && 'active'">
+      <img src="src/assets/vector/files/ui/line.svg" alt="ui icon"/>
+    </div>
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/text.svg" alt="ui icon"/>
+    </div>
+    <div class="button fl-c">
+      <img src="src/assets/vector/files/ui/image.svg" alt="ui icon"/>
+    </div>
+  </div>
+  <div id="minimap" class="ui-wrapper full-h">
+    
+  </div>
+  <div id="detailswindow" class="ui-wrapper full-hw hidden right">
+    
+  </div>
+  <div id="bottombar" class="full-h">
+    <div class="ui-wrapper m-s-r">
+      <div class="button fl-c"><h4>Dev</h4></div>
+    </div>
+    <div class="ui-wrapper">
+      <div class="button fl-c">
+        <img src="src/assets/vector/files/ui/note.svg" alt="ui icon"/>
+      </div>
+    </div>
+  </div>
+</menu>

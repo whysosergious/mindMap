@@ -1,0 +1,15 @@
+.point-group {
+  visibility: hidden;
+}
+
+.node-path:hover .point-group {
+  visibility: visible;
+}
+
+.point-option {
+  visibility: hidden;
+}
+
+.point-group:hover .point-option {
+  visibility: visible;
+}

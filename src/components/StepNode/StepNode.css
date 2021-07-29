@@ -1,0 +1,23 @@
+.step-node {
+  --height: 5rem;
+  --width: 5rem;
+  --pos: 200px, 400px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--height);
+  width: var(--width);
+  background-color: red;
+  border-radius: 35%;
+
+  box-shadow:
+     5px 15px 43px -15px rgba(44, 26, 26, 0.37),
+     5px 15px 35px -25px rgba(41, 27, 51, 0.562);
+
+  /* transform: translate3d(var(--pos), 0); */
+}
+
+.step-node h3 {
+  text-align: center;
+}

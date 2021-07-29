@@ -1,39 +1,95 @@
-/* canvas ui */
-#canvasui {
+#nodemenu {
+  visibility: hidden;
   display: grid;
   position: fixed;
-  top: 0; left: 0;
-  height: 100%;
-  width: 100%;
-  /* background-color: #33333370; */
-
-  pointer-events: none;
-}
-
-/* canvas elements */
-.step-node {
-  --height: 5rem;
-  --width: 5rem;
-  --pos: 200px, 400px;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: var(--height);
-  width: var(--width);
-  background-color: red;
-  border-radius: 35%;
+  top: 160px;
+  left: 70px;
+  grid-template-rows: [title-row] calc(var(--fr-size) / 2) [tab-row] var(--fr-size) [search-row] 36px [node-row] calc(var(--fr-size) * 9) [bottom-row] calc(var(--fr-size) / 1.5);
+  /* height: calc(var(--fr-size)*9); */
+  width: calc(var(--fr-size)*10);
+  background-color: white;
+  border-radius: 4px;
 
   box-shadow:
-     5px 15px 43px -15px rgba(44, 26, 26, 0.37),
-     5px 15px 35px -25px rgba(41, 27, 51, 0.562);
+    6px 5px 10px -3px rgba(44, 26, 26, 0.219),
+    -2px 4px 15px 0px rgba(41, 27, 51, 0.116);
 
-  /* box-shadow: 10px 10px 10px -4px black; */
+  overflow: hidden;
 
-  transform: translate3d(var(--pos), 0);
+  transform: scale(.9);
+  opacity: 0;
 }
 
-.step-node h3 {
-  text-align: center;
-  /* width: 100%; */
+#nodemenu.show {
+  visibility: visible;
+  transform: scale(1);
+  opacity: 1;
+}
+
+.title-row {
+  grid-row: title-row;
+  color: white;
+  background-color: rgb(39, 64, 85);
+}
+
+.node-tabs {
+  display: flex;
+  grid-row: tab-row;
+}
+
+.tab:not(:last-child) {
+  border-right: 1px solid rgb(255, 229, 244);
+}
+
+.tab:hover {
+  background-color: rgb(246, 251, 252);
+}
+
+.tab.active {
+  background-color: rgb(237, 244, 245);
+}
+
+.search-bar {
+  grid-row: search-row;
+  padding-left: 6px;
+  
+}
+
+.search-bar img {
+  height: 100%;
+  padding: 6px;
+  opacity: .6;
+}
+
+.search-bar input {
+  font-size: 1rem;
+  color: grey;
+  height: 100%;
+  width: 100%;
+  padding: 10px 8px 4px 8px;
+  border: none;
+  outline: none;
+}
+
+.bottom-row {
+  grid-row: bottom-row;
+}
+
+.node-grid {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 100px);
+}
+
+.node {
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.node img {
+  height: 70%;
+  width: 70%;
 }

@@ -1,22 +1,19 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
     <title>Vue test</title>
+    <link rel="stylesheet" href="styles/typography.css"/>
     <link rel="stylesheet" href="app.css"/>
     <link rel="stylesheet" href="styles/shared.css"/>
     <link rel="stylesheet" href="styles/components.css"/>
+    <style id="componentsheet"></style>
   </head>
 
   <body>
     <section id="app">
-      <div id="viewport">
-        <div id="canvas">
-          <step-node :z="30" :cz="canvasZ" bg="blue"></step-node>
-          <step-node :z="60" :cz="canvasZ" bg="red"></step-node>
-        </div>
-      </div>
-      <canvasui></canvasui>
+      <viewport></viewport>
     </section>
 
     <script src="https://unpkg.com/vue@next"></script>
