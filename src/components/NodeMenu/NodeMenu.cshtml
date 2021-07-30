@@ -15,8 +15,10 @@
     <input type="text" placeholder="Search" />
   </div>
   <div class="node-grid brdr-xs-t">
-    <div class="node fl-c" v-for="(node, index) in nodes" :key="index">
-      <img :src="node.icon" alt="node icon" />
+    <div class="node fl-c" v-for="(node, index) in presetNodes" :key="index">
+      <div class="draggable-icon-wrapper" @mousedown="(ev)=>pickNode(ev, node)">
+        <img class="draggable-icon" :src="node.icon" alt="node icon" draggable="false"/>
+      </div>
       <h5>{{ node.label }}</h5>
     </div>
   </div>

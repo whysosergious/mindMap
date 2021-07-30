@@ -2,46 +2,31 @@ import { _gc, _proxies } from '/gc.js';
 // const { watchEffect } = Vue;
 
 // scoped styles
-const scopedCSS = (id, vals) => `
-  [${ id }] h3 { 
-    font-size: ${ vals.fontSize }rem;
-    color: ${ vals.bg === 'blue' ? 'white' : 'black' };
-  }
-  [${ id }].step-node { 
-    background-color: ${ vals.bg };
-  }`;
+// const scopedCSS = (id, vals) => `
+//   [${ id }] h3 { 
+//     font-size: ${ vals.fontSize }rem;
+//   }
+//   [${ id }].step-node { 
+//     background-color: ${ vals.bg };
+//   }`;
 
 
 /** Node component */
 export default {
   props: {
-    z: Number,
-    mod: String,
+    node: Object,
     bg: String,
     cz: Number
   },
   setup(props) {
     // temp obj simulating fetched values
-    const data = {
-      pos: {
-        y: 930,
-        x: 1371,
-        z: 70,
-        unit: 'px'
-      },
-      dims: {
-        h: 7,
-        w: 7,
-        unit: 'rem'
-      }
-    }
 
     
     // scoped css values
-    const cssVals = {
-      fontSize: .8,
-      bg: props.bg
-    }
+    // const cssVals = {
+    //   fontSize: .8,
+    //   bg: props.bg
+    // }
 
     let count = ++_gc.count;
     return {
@@ -51,12 +36,10 @@ export default {
       props,
 
       // data
-      text: 'Step Node',
-      data,
-      mod: () => 1 - ((props.z + props.cz) / (_gc.viewport.perspective / 100) / 100), // adjustment modifier for 3d perspective
+      mod: () => 1 - ((props.node.z + props.cz) / (_gc.viewport.perspective / 100) / 100), // adjustment modifier for 3d perspective
 
       // css
-      scopedCSS, cssVals
+      // scopedCSS, cssVals
     }
   },
   template: await _gc.getTemplate('StepNode', true),
@@ -66,9 +49,9 @@ export default {
       _proxies.scopedCSS.val = { id, css: scopedCSS(id, cssVals) };
     },
     updatePos() {
-      const { $el, props, data: { pos } } = this;
+      const { $el, $props: { node } } = this;
       
-      $el.style.transform = `translate3d(${ pos.x }${ pos.unit }, ${ pos.y }${ pos.unit }, ${ props.z }${ pos.unit })`;
+      $el.style.transform = `translate3d(${ node.x }px, ${ node.y }px, ${ node.z }px)`;
     },
     // w() {
     //   watchEffect(() => {
@@ -78,6 +61,7 @@ export default {
 
     // event handlers
     handleGrab(ev) {
+      
       // latest & original values: { coords, scroll offsets }
       this.lv = {
         y: 0,
@@ -96,22 +80,23 @@ export default {
     },
     handleMove(ev)  {
       ev.preventDefault();
-      let { data, mod, lv } = this;
+      let { $props: { node }, mod, lv } = this;
       mod = mod();
 
-      data.pos.y -= (lv.oy - ev.y)*mod - lv.y;
-      data.pos.x -= (lv.ox - ev.x)*mod - lv.x;
+      node.y -= (lv.oy - ev.y)*mod - lv.y;
+      node.x -= (lv.ox - ev.x)*mod - lv.x;
       lv.y = (lv.oy - ev.y)*mod;
       lv.x = (lv.ox - ev.x)*mod;
 
+      // console.log('o ', node.x, node.y);
       this.updatePos();
     },
     handleScroll(ev) {
-      const { data, lv } = this;
+      const { $props: { node }, lv } = this;
       const { scrollTop, scrollLeft } = ev.target;
 
-      data.pos.y -= lv.osoy - scrollTop - lv.soy;
-      data.pos.x -= lv.osox - scrollLeft - lv.sox;
+      node.y -= lv.osoy - scrollTop - lv.soy;
+      node.x -= lv.osox - scrollLeft - lv.sox;
       lv.soy = lv.osoy - scrollTop;
       lv.sox = lv.osox - scrollLeft;
 
@@ -124,9 +109,22 @@ export default {
     }
   },
   beforeMount() {
-    this.updateCss();
+    this.node.z = this.node.z - this.$props.cz;
+    
   },
   mounted() {
     this.updatePos();
+    this.$el.classList.add('transition-z');
+
+    setTimeout(()=>{
+      this.node.z = Math.floor(Math.random()*40);
+      this.node.x = this.node.x;
+      this.node.y = this.node.y;
+      this.updatePos();
+      this.$el.addEventListener('transitionend', ()=>{
+        this.$el.classList.remove('transition-z');
+      }, { once: true });
+    },10);
+    
   }
 }

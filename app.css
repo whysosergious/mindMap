@@ -1,11 +1,29 @@
+::-webkit-scrollbar {
+  height: 9px;
+  width: 9px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d8e7e3;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #5895a0;
+}
+
+:root {
+  font-size: 16px;
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  
 }
 
 #app {
-  --fr-size: 45px;
+  --fr-size: 40px;
   --gap: 7px;
   /* background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898; */
   background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
@@ -40,17 +58,18 @@ html, body {
 }
 
 #canvas {
+  --size-mod: 2;
+  --rel-size: calc(100% * var(--size-mod));
   position: absolute;
-  top: -50%; left: -50%;
-  height: calc(100% * 2);
-  width: calc(100% * 2);
+  top: calc(var(--rel-size)/4 * -1); left: calc(var(--rel-size)/4 * -1);
+  height: var(--rel-size);
+  width: var(--rel-size);
   transform-style: preserve-3d;
-  /* perspective-origin: center; */
-  /* transform-origin: 0 0 ; */
   transition: transform .2s ease-out;
-
+  background: url("src/assets/vector/bggrid.svg") repeat center;
+  background-size: 40px;
   /* temp */
-  border: 2px solid black;
+  outline: 2px solid black;
 }
 
 h1, div {

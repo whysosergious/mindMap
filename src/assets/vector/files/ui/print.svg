@@ -3,14 +3,14 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#333333;}
+	.st0{fill:#717F7D;}
 </style>
 <g id="Shopping_Bag">
 </g>
 <g>
-	<path class="st0" d="M49.9,18.4H10.1c-2,0-3.6,1.6-3.6,3.6v16.3c0,2,1.6,3.6,3.6,3.6h5.4V27.4h28.9v14.5h5.4c2,0,3.6-1.6,3.6-3.6
+	<path class="st0" d="M49.9,18.4H10.1c-2,0-3.6,1.6-3.6,3.6v16.3c0,2,1.6,3.6,3.6,3.6h3.4V27.4h32.9v14.5h3.4c2,0,3.6-1.6,3.6-3.6
 		V22C53.5,20,51.9,18.4,49.9,18.4z"/>
-	<path class="st0" d="M17.8,29.2v21.5h24.3V29.2H17.8z M39.1,48H20.9V31.8h18.2V48z"/>
-	<path class="st0" d="M46.3,14.8H13.7v-3.6c0-1,0.8-1.8,1.8-1.8h28.9c1,0,1.8,0.8,1.8,1.8V14.8z"/>
+	<path class="st0" d="M17.7,30.8v20.8h24.6V30.8H17.7z"/>
+	<path class="st0" d="M46.3,14.8H13.7V9.2c0-1,0.8-1.8,1.8-1.8h28.9c1,0,1.8,0.8,1.8,1.8L46.3,14.8L46.3,14.8z"/>
 </g>
 </svg>

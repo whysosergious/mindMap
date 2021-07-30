@@ -77,7 +77,7 @@ export const _proxies = {
 
 
 // preset nodes
-export const _nodes = [
+export const _presetNodes = [
   {
     label: 'Email',
     icon: 'src/assets/vector/files/nodes/email.svg',
@@ -97,6 +97,18 @@ export const _nodes = [
   {
     label: 'Condition',
     icon: 'src/assets/vector/files/nodes/if-mod.svg',
+  },
+  {
+    label: 'Sms',
+    icon: 'src/assets/vector/files/nodes/sms.svg',
+  },
+  {
+    label: 'Event',
+    icon: 'src/assets/vector/files/nodes/event.svg',
+  },
+  {
+    label: 'Survey',
+    icon: 'src/assets/vector/files/nodes/survey.svg',
   },
   {
     label: 'Pause',
@@ -125,5 +137,52 @@ export const _nodes = [
   {
     label: 'Send email',
     icon: 'src/assets/vector/files/nodes/email-send.svg',
-  }  
+  },
+
+
+  // repeated
+  {
+    label: 'Condition',
+    icon: 'src/assets/vector/files/nodes/if-mod.svg',
+  },
+  {
+    label: 'Sms',
+    icon: 'src/assets/vector/files/nodes/sms.svg',
+  },
+  {
+    label: 'Event',
+    icon: 'src/assets/vector/files/nodes/event.svg',
+  },
+  {
+    label: 'Survey',
+    icon: 'src/assets/vector/files/nodes/survey.svg',
+  },
+  {
+    label: 'Pause',
+    icon: 'src/assets/vector/files/nodes/pause.svg',
+  },
+  {
+    label: 'Resume',
+    icon: 'src/assets/vector/files/nodes/resume.svg',
+  },
+  {
+    label: 'Stop',
+    icon: 'src/assets/vector/files/nodes/stop.svg',
+  },
+  {
+    label: 'Segments',
+    icon: 'src/assets/vector/files/nodes/segments.svg',
+  },
+  {
+    label: 'Bounced mail',
+    icon: 'src/assets/vector/files/nodes/email-bounce.svg',
+  },
+  {
+    label: 'Email error',
+    icon: 'src/assets/vector/files/nodes/email-error.svg',
+  },
+  {
+    label: 'Send email',
+    icon: 'src/assets/vector/files/nodes/email-send.svg',
+  }
 ];

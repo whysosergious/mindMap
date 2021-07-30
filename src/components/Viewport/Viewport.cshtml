@@ -1,9 +1,21 @@
 <div id="viewport">
   <div id="canvas" @click.passive="closeOpenWindows">
     <node-lines></node-lines>
-    <step-node :z="30" :cz="offset.canZ" bg="blue"></step-node>
-    <step-node :z="60" :cz="offset.canZ" bg="red"></step-node>
+    <template v-for="(node, index) in nodes" :key="index">
+      <step-node 
+        :node="node"
+        :cz="offset.canZ" 
+        bg="blue">
+      </step-node>
+    </template>
   </div>
   <interface></interface>
-  <node-menu :show="nodeMenu.show" :x="nodeMenu.x" :y="nodeMenu.y"></node-menu>
+  <node-menu 
+    :show="nodeMenu.show" 
+    :x="nodeMenu.x" 
+    :y="nodeMenu.y" 
+    :addNode="addNode"
+    :cz="offset.canZ"
+    >
+  </node-menu>
 </div>

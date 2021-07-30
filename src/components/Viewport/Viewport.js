@@ -20,7 +20,16 @@ export default {
         scrX: 0,
         canZ: 0
       },
-      nodeMenu: _gc.interface.nodeMenu
+      nodeMenu: _gc.interface.nodeMenu,
+      nodes: [
+        {
+          label: 'Email',
+          icon: 'src/assets/vector/files/nodes/email.svg',
+          y: 930,
+          x: 1371,
+          z: 50
+        }
+      ]
     }
   },
   template: await _gc.getTemplate('Viewport'),
@@ -31,6 +40,9 @@ export default {
     StepNode
   },
   methods: {
+    addNode(node) {
+      this.nodes.push(node);
+    },
     closeOpenWindows(ev) {
       if (ev.target.id !== 'linecanvas' && ev.target.tag !== 'circle')
         return;
@@ -78,8 +90,8 @@ export default {
     const { offset } = this;
     let mod;
     const handleNavigation = ev => {
-      let soy = (ev.y - vph/2) / 5,
-          sox = (ev.x - vpw/2) / 5,
+      let soy = (ev.y - vph/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
+          sox = (ev.x - vpw/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
           delta = ev.deltaY;
 
       if (ev.ctrlKey) {
@@ -96,11 +108,11 @@ export default {
         //   });
 
         
-        offset.canZ -= delta/2.5;
+        offset.canZ -= offset.canZ > 10 ? delta/2.5 / (1+offset.canZ/60) : delta/2.5;
       } else if (ev.shiftKey) {
-        offset.scrX -= delta;
+        offset.scrX -= offset.canZ > 10 ? delta / (1+offset.canZ/60) : delta;
       } else {
-        offset.scrY -= delta;
+        offset.scrY -= offset.canZ > 10 ? delta / (1+offset.canZ/60) : delta;
       }
 
       canvas.style.transform = `translate3d(${ offset.scrX }px, ${ offset.scrY }px, ${ offset.canZ }px)`;
@@ -154,7 +166,7 @@ export default {
     }
 
     // viewport.addEventListener('scroll', handleNavigation, { passive: false, capture: false });
-    viewport.addEventListener('wheel', handleNavigation, { passive: false, capture: false });
+    canvas.addEventListener('wheel', handleNavigation, { passive: false, capture: false });
     // viewport.addEventListener('touchmove', handleNavigation, { passive: false, capture: false });
     
   }

@@ -1,6 +1,6 @@
-#interface {
+#mmui {
   display: grid;
-  position: fixed;
+  position: absolute;
   top: 0; left: 0;
   height: 100%;
   width: 100%;
@@ -41,11 +41,11 @@
 }
 
 .button img {
-  opacity: .5;
+  opacity: .7;
 }
 
 .button.active img {
-  opacity: .8;
+  opacity: 1;
 } 
 
 .button.active {
@@ -58,7 +58,8 @@
 
 #topbar {
   grid-row: top-row;
-  grid-column: left-column / span 2;
+  grid-column: left-column / span 3;
+  justify-self: center;
 }
 
 #toprightbar {
@@ -83,10 +84,11 @@
   grid-row: extended-bottom-row / span 2;
   grid-column: left-column / span 2;
   width: calc(var(--fr-size)*7);
+  background-color: rgb(230, 230, 230);
   opacity: .4;
 }
 #minimap:hover {
-  opacity: 1;
+  opacity: .8;
 }
 
 #detailswindow {
