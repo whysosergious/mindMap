@@ -26,8 +26,12 @@
   margin-right: 7px;
 }
 
+.m-s-all {
+  margin: 10px;
+}
+
 /* paddings */
-.p-all-s {
+.p-s-all {
   padding: 10px;
 }
 

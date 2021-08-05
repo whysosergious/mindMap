@@ -37,9 +37,7 @@ export default {
   },
   methods: {
     addNode(node) {
-      let id = `ugn${ ++_gc.count }`;
-      node.id = id;
-      this.nodes[id] = node;
+      this.nodes[node.id] = node;
     },
     closeOpenWindows(ev) {
       if (ev.target.id !== 'linecanvas' && ev.target.tag !== 'circle')

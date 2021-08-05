@@ -69,6 +69,7 @@ export default {
       canvas.addEventListener('mouseup', (ev)=>{
         app.classList.remove('drawing');
         let newNode = {
+          id: `ugn${ ++_data.count }`,
           label: node.label,
           icon: node.icon,
           h: 100,

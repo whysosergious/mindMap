@@ -1,15 +1,18 @@
-.point-group {
-  visibility: hidden;
-}
-
-.node-path:hover .point-group {
-  visibility: visible;
-}
-
+.path-ui,
+.point-group,
 .point-option {
-  visibility: hidden;
+  /* visibility: hidden; */
+  opacity: 0;
+  transition: opacity .15s ease .15s, visibility 0s ease .3s;
 }
 
+.node-path:hover :is(.point-group, .path-ui),
 .point-group:hover .point-option {
   visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.arrow {
+  transform-origin: center;
 }

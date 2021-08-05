@@ -1,4 +1,4 @@
-import { _gc, _proxies } from '/gc.js';
+import { _gc, _data, _proxies } from '/gc.js';
 
 
 // scoped styles
@@ -14,7 +14,7 @@ export default {
 
   },
   setup(props) {
-    let count = ++_gc.count;
+    let count = ++_data.count;
         
     // scoped css values
     const cssVals = {

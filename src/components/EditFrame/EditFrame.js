@@ -8,7 +8,9 @@ export default {
   },
   emits: ['resize', 'conn-line'],
   data() {
+    return {
 
+    }
   },
   template: await _gc.getTemplate('EditFrame', true),
   methods: {

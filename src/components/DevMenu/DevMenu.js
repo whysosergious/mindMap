@@ -7,6 +7,7 @@ export default {
   data() {
     return {
       mmData: _data,
+      ui: _gc.interface.ui
     }
   },
   template: await _gc.getTemplate('DevMenu', true),

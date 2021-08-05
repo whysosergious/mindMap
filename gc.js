@@ -1,6 +1,5 @@
 // global controller
 export const _gc = {
-  count: 0,
   templates: {},
   viewport: {
     perspective: 400,
@@ -47,7 +46,7 @@ export const _gc = {
     },
     calcRelEndPoint(line) {
       let y = line.points.length === 0 ? line.y : line.points[line.points.length-1].y,
-        x = line.points.length === 0 ? line.x : line.points[line.points.length-1].x
+        x = line.points.length === 0 ? line.x : line.points[line.points.length-1].x;
 
       let disY = line.ey - y,
         disX = line.ex - x,
@@ -55,6 +54,16 @@ export const _gc = {
 
       line.rel.ex = ~~(_data.nodes[line.connTo].w*0.75*disX/dis);
       line.rel.ey = ~~(_data.nodes[line.connTo].h*0.75*disY/dis);
+
+      this.calcRelRotation(line, x, y);
+    },
+    calcRelRotation(line, x, y) {
+      if (!x || !y) {
+        y = line.points.length === 0 ? line.y : line.points[line.points.length-1].y;
+        x = line.points.length === 0 ? line.x : line.points[line.points.length-1].x;
+      }
+
+      line.rel.ed = Math.atan2(y - line.ey, x - line.ex) * 180 / Math.PI;
     }
   }
 }
@@ -100,12 +109,12 @@ export const _proxies = {
 }
 
 // custom methods
-JSON.safeStringify = (obj, indent = 1) => {
+JSON.stringifyMap = (obj, indent = 1) => {
   let cache = [];
   const retVal = JSON.stringify(
     obj,
     (key, value) =>
-      key === 'hitboxes' ? undefined :
+      /^hitboxes$|^el$|^altClass$/.test(key) ? undefined :
       typeof value === "object" && value !== null
         ? cache.includes(value)
           ? undefined 
@@ -120,7 +129,7 @@ JSON.safeStringify = (obj, indent = 1) => {
 
 
 // dummy node data
-export const _data = {
+export let _data = {
   nodes: {
     ugn0: {
       id: `ugn0`,
@@ -137,7 +146,8 @@ export const _data = {
   },
   lines: {}
 }
-let a = JSON.stringify({
+let dummy = JSON.stringify({
+  "count": 20,
   "nodes": {
    "ugn0": {
     "id": "ugn0",
@@ -234,7 +244,6 @@ let a = JSON.stringify({
      "y": 945
     },
     "connFrom": "ugn0",
-    "el": {},
     "connTo": "ugn2"
    },
    "ugl5": {
@@ -266,7 +275,6 @@ let a = JSON.stringify({
      "y": 752
     },
     "connTo": "ugn2",
-    "el": {},
     "connFrom": "ugn3"
    },
    "ugl6": {
@@ -298,14 +306,12 @@ let a = JSON.stringify({
      "y": 867
     },
     "connFrom": "ugn3",
-    "el": {},
     "connTo": "ugn0"
    }
   }
  });
-_data.nodes = JSON.parse(a).nodes;
-_data.lines = JSON.parse(a).lines;
 
+_data = JSON.parse(dummy);
 
 
 // preset nodes

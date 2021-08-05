@@ -17,7 +17,7 @@ export default {
 
       // conn || (conn.type = null);
       
-      let id = `ugl${ ++_gc.count }`;
+      let id = `ugl${ ++_data.count }`;
       this.lines[id] = {
         id,
         altClass: null,
@@ -25,7 +25,7 @@ export default {
         y: conn.type === 'connto' ? conn.node.y + conn.node.h/2 : conn.type === 'connfrom' ? conn.node.y + conn.node.h/2 : ev.offsetY,
         ex: conn.type === 'connfrom' ? conn.node.x + conn.node.w/2 : conn.type === 'connto' ? conn.node.x + conn.node.w + 5 : ev.offsetX,
         ey: conn.type === 'connfrom' ? conn.node.y + conn.node.h/2 : conn.type === 'connto' ? conn.node.y + conn.node.h/2 : ev.offsetY,
-        rel: {x:0,y:0,ex:0,ey:0},
+        rel: {x:0,y:0,ex:0,ey:0,ed:0},
         points: [],
         hitboxes: [],
         deleteBtn: {
@@ -106,7 +106,6 @@ export default {
       } else {
         this.setupListeners(this.drawTo, this.lines[id]);
       }
-      console.log(_data.lines)
     },
     setupListeners(eventFunc, line, point) {
       let initFunc = (ev)=>eventFunc(ev, line, point),
@@ -126,21 +125,30 @@ export default {
       let target = document.elementFromPoint(ev.x, ev.y);
       if (/drawTo/.test(action) && target.dataset.nodeid) {
         line.connTo = target.dataset.nodeid;
+
         if (line.connFrom) 
           _data.nodes[line.connFrom].linesTo[line.id].nodeId = line.connTo;
         
-        _data.nodes[target.dataset.nodeid].linesFrom[line.id] = {
+        _data.nodes[line.connTo].linesFrom[line.id] = {
           lineId: line.id,
           nodeId: line.connFrom
         }
+
+        line.ex = _data.nodes[line.connTo].x + _data.nodes[line.connTo].w/2;
+        line.ey = _data.nodes[line.connTo].y + _data.nodes[line.connTo].h/2;
       } else if (/drawFrom/.test(action) && target.dataset.nodeid) {
         line.connFrom = target.dataset.nodeid;
+
         if (line.connTo) 
           _data.nodes[line.connTo].linesFrom[line.id].nodeId = line.connFrom;
-        _data.nodes[target.dataset.nodeid].linesTo[line.id] = {
+
+        _data.nodes[line.connFrom].linesTo[line.id] = {
           lineId: line.id,
           nodeId: line.connTo
         }
+
+        line.x = _data.nodes[line.connFrom].x + _data.nodes[line.connFrom].w/2;
+        line.y = _data.nodes[line.connFrom].y + _data.nodes[line.connFrom].h/2;
       }
       line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
       line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
@@ -152,22 +160,39 @@ export default {
     // these need to be joined *********
     drawFrom(ev, line) {
       line.lineTools();
+
+      if (line.connFrom) {
+        delete _data.nodes[line.connFrom].linesTo[line.id];
+        line.connFrom = null;
+      }
+
+      line.rel.x = 0;
+      line.rel.y = 0;
       line.x = ev.offsetX;
       line.y = ev.offsetY;
 
-      line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
     },
     drawTo(ev, line) {
       line.lineTools();
+
+      if (line.connTo) {
+        delete _data.nodes[line.connTo].linesFrom[line.id];
+        line.connTo = null;
+      }
+
+      line.rel.ex = 0;
+      line.rel.ey = 0;
       line.ex = ev.offsetX;
       line.ey = ev.offsetY;
 
-      line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
+      line.connFrom && _gc.sharedMethods.calcRelPoint(line);
+      _gc.sharedMethods.calcRelRotation(line);
     },
     // ^^ *******************************
     newPoint(ev, line, index) {
       let point = {
-        id: `${ line.id }p${ ++_gc.count }`,
+        id: `${ line.id }p${ ++_data.count }`,
         x: ev.offsetX,
         y: ev.offsetY
       }
@@ -249,12 +274,12 @@ export default {
           y: ~~optBtnPoint.y
         };
       }
+
+      line.genHitboxes();
     });
   },
   mounted() {
     _gc.sharedMethods.startDraw = this.startDraw;
     _data.lines = this.lines;
-
-    
   }
 }

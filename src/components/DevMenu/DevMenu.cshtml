@@ -1,4 +1,4 @@
-<div id="devmenu" :class="altClass">
+<div id="devmenu">
   <div class="title-row fl-c">
     <h4>Dev menu</h4>
   </div>
@@ -11,8 +11,10 @@
     </div>
   </div>
 
-  <div class="text-container full-hw brdr-xs-t p-all-s">
-    <pre><code><h4>{{ JSON.safeStringify(mmData) }}</h4></code></pre>
+  <div class="text-container full-hw brdr-xs-t p-s-all">
+    <pre v-if="ui.activeMenu === 'dev'">
+      <h4>{{ JSON.stringifyMap(mmData) }}</h4>
+    </pre>
   </div>
   <div class="bottom-row brdr-xs-t fl-c">
     <h4>Nothing here for now</h4>

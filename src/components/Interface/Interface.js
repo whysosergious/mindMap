@@ -1,4 +1,4 @@
-import { _gc, _proxies } from '/gc.js';
+import { _gc, _data, _proxies } from '/gc.js';
 
 // components
 import DevMenu from '/src/components/DevMenu/DevMenu.js';
@@ -9,7 +9,7 @@ export default {
 
   },
   data() {
-    let count = ++_gc.count;
+    let count = ++_data.count;
     return {
       // meta
       id: `gc${ count }`,

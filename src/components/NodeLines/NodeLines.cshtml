@@ -3,18 +3,26 @@
     <g class="node-path" :class="line.altClass" v-if="typeof line === 'object'">
       <path stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />
       <g v-for="(hitbox, index) in line.hitboxes" :key="index">
-        <path :id="index === 0 ? `${ line.id }fhb` : index === line.hitboxes.length-1 ? `${ line.id }lhb` : null" @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="24" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
+        <circle v-if="index !== 0" :cx="hitbox.x" :cy="hitbox.y" r="14" fill="#57105205" />
+        <path @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="27" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
       </g>
-      <circle @mousedown.left.stop="moveStartPoint(line)" :cx="line.x" :cy="line.y" r="7" fill="darkgrey" />
-      <circle @mousedown.left.stop="deleteLine(line.id)" :cx="line.deleteBtn.x" :cy="line.deleteBtn.y" r="7" fill="red" />
-      <circle @mousedown.left.stop="moveEndPoint(line)" :cx="line.ex" :cy="line.ey" r="7" fill="darkgrey" />
-      <template v-for="(point, index) in line.points" :key="index">
-        <g class="point-group">
-          <circle :cx="point.x" :cy="point.y" r="26" fill="#57105205" />
-          <circle @mousedown.left.stop="initMovePoint(line, point)" :id="point.id" :cx="point.x" :cy="point.y" r="8" fill="darkgrey" />
-          <circle class="point-option" @mousedown.left.stop="deletePoint(line, index)" :cx="point.x + 12" :cy="point.y - 12" r="5" fill="red" />
-        </g>
-      </template>
+      <g class="path-ui">
+        <circle @mousedown.left.stop="moveStartPoint(line)" :cx="line.x + line.rel.x" :cy="line.y + line.rel.y" r="6" fill="#920072" />
+        <circle @mousedown.left.stop="deleteLine(line.id)" :cx="line.deleteBtn.x" :cy="line.deleteBtn.y" r="7" fill="red" />
+        <template v-for="(point, index) in line.points" :key="index">
+          <g class="point-group">
+            <circle :cx="point.x" :cy="point.y" r="24" fill="#57105205" />
+            <circle @mousedown.left.stop="initMovePoint(line, point)" :id="point.id" :cx="point.x" :cy="point.y" r="6" fill="#920072" />
+            <circle class="point-option" @mousedown.left.stop="deletePoint(line, index)" :cx="point.x + 12" :cy="point.y - 12" r="5" fill="red" />
+          </g>
+        </template>
+      </g>
+      <g @mousedown.left.stop="moveEndPoint(line)">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="12" width="12" :x="line.ex - line.rel.ex - 6" :y="line.ey - line.rel.ey - 6" viewBox="0 0 60 60">
+            <path class="arrow" fill="darkcyan" :style="`transform: rotate(${ line.rel.ed }deg)`" d="M32.4,5h20.3c1.2,0,1.9,1.2,1.5,2.2L29.6,30l24.6,22.8c0.6,1-0.3,2.2-1.5,2.2H32.3c-0.6,0-1.2-0.3-1.5-0.9L5.6,30L30.9,5.9 C31.2,5.3,31.8,5,32.4,5z"/>
+        </svg>
+        <circle :cx="line.ex - line.rel.ex" :cy="line.ey - line.rel.ey" r="12" fill="#92007200" />
+      </g>
     </g>
   </template>
 </svg>
