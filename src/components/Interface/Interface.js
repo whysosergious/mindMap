@@ -1,5 +1,8 @@
 import { _gc, _proxies } from '/gc.js';
 
+// components
+import DevMenu from '/src/components/DevMenu/DevMenu.js';
+
 /** main UI component */
 export default {
   props: {
@@ -17,6 +20,9 @@ export default {
     }
   },
   template: await _gc.getTemplate('Interface', true),
+  components: {
+    DevMenu
+  },
   computed: {
     
   },
@@ -28,11 +34,14 @@ export default {
       _gc.interface.nodeMenu.show = true;
       _gc.interface.nodeMenu.x = 0;
       _gc.interface.nodeMenu.y = 0;
+    },
+    openDetailsWindow(menu) {
+      this.ui.activeMenu = this.ui.activeMenu !== menu ? menu : null;
     }
   },
   beforeMount() {
   },
   mounted() {
-    _gc.interface.ui = this.ui;
+    // _gc.interface.ui = this.ui;
   }
 }

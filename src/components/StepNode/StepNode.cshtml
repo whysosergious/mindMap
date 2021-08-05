@@ -1,4 +1,5 @@
 <div class="step-node fl-c" @mousedown.left.default="handleGrab($event, $el)" :[id]="count">
-  <h3>{{ node.label }}</h3>
-  <img :src="node.icon" alt="Node icon">
+  <h4>{{ node.label }}</h4>
+  <img :src="node.icon" :data-nodeid="node.id" alt="Node icon">
+  <edit-frame @resize="handleStartResize" :node="node" :cz="$props.cz"></edit-frame>
 </div>

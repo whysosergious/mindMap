@@ -1,11 +1,12 @@
 <div id="viewport">
   <div id="canvas" @click.passive="closeOpenWindows">
-    <node-lines></node-lines>
+    <node-lines @conn-line="startDraw"></node-lines>
     <template v-for="(node, index) in nodes" :key="index">
       <step-node 
         :node="node"
         :cz="offset.canZ" 
-        bg="blue">
+        bg="blue"
+        :hooks="nodeHooks">
       </step-node>
     </template>
   </div>

@@ -1,4 +1,4 @@
-import { _gc, _presetNodes } from '/gc.js';
+import { _gc, _presetNodes, _data } from '/gc.js';
 
 /** Context menu component */
 export default {
@@ -71,11 +71,15 @@ export default {
         let newNode = {
           label: node.label,
           icon: node.icon,
+          h: 100,
+          w: 100,
           y: (ev.offsetY - this.lv.innerOffY) - ((ev.y * (1+clone.z/perspective) - ev.y) - viewport.offsetHeight*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)),
           x: (ev.offsetX - this.lv.innerOffX) - ((ev.x * (1+clone.z/perspective) - ev.x) - viewport.offsetWidth*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)),
-          z: clone.z
+          z: clone.z,
+          linesTo: {},
+          linesFrom: {}
         }
-        console.log('n ', newNode.x, newNode.y);
+        // console.log('n ', newNode.x, newNode.y);
         this.$props.addNode(newNode);
         el.classList.remove('dragging');
         clone.remove();

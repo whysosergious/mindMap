@@ -1,4 +1,4 @@
-import { _gc } from '/gc.js';
+import { _gc, _data } from '/gc.js';
 
 // components
 import ContextMenu from '/src/components/ContextMenu/ContextMenu.js';
@@ -14,6 +14,7 @@ export default {
   },
   data() {
     return {
+      count: 1,
       perspective: _gc.viewport.perspective,
       offset: {
         scrY: 0,
@@ -21,15 +22,10 @@ export default {
         canZ: 0
       },
       nodeMenu: _gc.interface.nodeMenu,
-      nodes: [
-        {
-          label: 'Email',
-          icon: 'src/assets/vector/files/nodes/email.svg',
-          y: 930,
-          x: 1371,
-          z: 50
-        }
-      ]
+      nodes: _data.nodes,
+      nodeHooks: {
+        updatePos: {}
+      }
     }
   },
   template: await _gc.getTemplate('Viewport'),
@@ -41,7 +37,9 @@ export default {
   },
   methods: {
     addNode(node) {
-      this.nodes.push(node);
+      let id = `ugn${ ++_gc.count }`;
+      node.id = id;
+      this.nodes[id] = node;
     },
     closeOpenWindows(ev) {
       if (ev.target.id !== 'linecanvas' && ev.target.tag !== 'circle')
@@ -50,6 +48,12 @@ export default {
       this.nodeMenu.show = false;
       this.nodeMenu.x = 0;
       this.nodeMenu.y = 0;
+
+      _gc.selected && _gc.selected.classList.remove('selected');
+      _gc.selected = null;
+    },
+    startDraw(type) {
+      console.log(type)
     }
   },
   beforeMount() {
@@ -98,24 +102,41 @@ export default {
         ev.preventDefault();
         ev.stopPropagation();
 
-        offset.scrY = offset.scrY + (delta > 0 ? soy : -soy);
-        offset.scrX = offset.scrX + (delta > 0 ? sox : -sox);
+        
 
         // viewport.scrollTo({
         //     top: viewport.scrollTop + (delta > 0 ? -soy : soy),
         //     left: viewport.scrollLeft + (delta > 0 ? -sox : sox),
         //     behavior: 'smooth'
         //   });
+        if (offset.canZ >= 300 && delta < 0) {
+          offset.canZ = 300;
+          canvas.style.transform = `translate3d(${ offset.scrX }px, ${ offset.scrY }px, ${ offset.canZ }px)`;
+          return;
+        } else if (offset.canZ <= -500 && delta > 0) {
+          offset.canZ = -500;
+          canvas.style.transform = `translate3d(${ offset.scrX }px, ${ offset.scrY }px, ${ offset.canZ }px)`;
+          return;
+        } else {
+          offset.scrY = offset.scrY + (delta > 0 ? soy : -soy);
+          offset.scrX = offset.scrX + (delta > 0 ? sox : -sox);
+  
+          offset.canZ -= offset.canZ > 10 ? delta/2.5 / (1+offset.canZ/100) : delta/2.5;
+        }
 
         
-        offset.canZ -= offset.canZ > 10 ? delta/2.5 / (1+offset.canZ/60) : delta/2.5;
       } else if (ev.shiftKey) {
-        offset.scrX -= offset.canZ > 10 ? delta / (1+offset.canZ/60) : delta;
+        offset.scrX -= offset.canZ > 10 ? delta / (1+offset.canZ/100) : delta;
       } else {
-        offset.scrY -= offset.canZ > 10 ? delta / (1+offset.canZ/60) : delta;
+        offset.scrY -= offset.canZ > 10 ? delta / (1+offset.canZ/100) : delta;
       }
 
-      canvas.style.transform = `translate3d(${ offset.scrX }px, ${ offset.scrY }px, ${ offset.canZ }px)`;
+      if (offset.canZ > 300 && delta < 0) {
+      
+      } else {
+        canvas.style.transform = `translate3d(${ offset.scrX }px, ${ offset.scrY }px, ${ offset.canZ }px)`;
+      }
+      
       // // ev.stopImmediatePropagation();
       // // console.log('ffff');
       // let delta = ev.deltaY;

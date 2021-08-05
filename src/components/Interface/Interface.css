@@ -6,7 +6,7 @@
   width: 100%;
   padding: var(--gap);
   grid-template-rows: [top-row] var(--fr-size) [second-row] var(--fr-size) [center-row] auto [extended-bottom-row] calc(var(--fr-size)*3) [bottom-row] var(--fr-size) [bottom-margin] calc(var(--gap) * 2);
-  grid-template-columns: [left-column] var(--fr-size) [center-column] auto [right-column] calc(var(--fr-size)*12);
+  grid-template-columns: [left-column] var(--fr-size) [center-column] auto [right-column] calc(var(--fr-size)*8);
   
   gap: var(--gap);
   /* background-color: #33333370; */
@@ -28,9 +28,11 @@
   box-shadow:
     6px 5px 10px -3px rgba(44, 26, 26, 0.219),
     -2px 4px 15px 0px rgba(41, 27, 51, 0.116);
+
+    overflow: hidden;
 }
 
-.hidden.right {
+.slide-right {
   transform: translate3d(calc(100% + var(--gap)), 0, 0);
 }
 
@@ -85,15 +87,19 @@
   grid-column: left-column / span 2;
   width: calc(var(--fr-size)*7);
   background-color: rgb(230, 230, 230);
-  opacity: .4;
+  opacity: .2;
 }
 #minimap:hover {
-  opacity: .8;
+  opacity: .6;
 }
 
 #detailswindow {
   grid-row: second-row / bottom-row;
   grid-column: right-column;
+  align-self: flex-end;
+  justify-self: flex-end;
+  height: 80%;
+  width: 400px;
 }
 
 #bottombar {

@@ -66,8 +66,8 @@ html, body {
   width: var(--rel-size);
   transform-style: preserve-3d;
   transition: transform .2s ease-out;
-  background: url("src/assets/vector/bggrid.svg") repeat center;
-  background-size: 40px;
+  background: url("/src/assets/vector/bggrid.svg") repeat center;
+  background-size: 20px;
   /* temp */
   outline: 2px solid black;
 }

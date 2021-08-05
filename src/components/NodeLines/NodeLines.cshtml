@@ -1,9 +1,9 @@
 <svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" xmlns="http://www.w3.org/2000/svg">
   <template v-for="(line, index) in lines" :key="index">
-    <g class="node-path" :class="line.altClass">
-      <path stroke="grey" stroke-width="3" :id="line.id" :d="`M ${ line.x } ${ line.y } ${ line.vertex() } L ${ line.ex } ${ line.ey }`" />
+    <g class="node-path" :class="line.altClass" v-if="typeof line === 'object'">
+      <path stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />
       <g v-for="(hitbox, index) in line.hitboxes" :key="index">
-        <path @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="24" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
+        <path :id="index === 0 ? `${ line.id }fhb` : index === line.hitboxes.length-1 ? `${ line.id }lhb` : null" @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="24" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
       </g>
       <circle @mousedown.left.stop="moveStartPoint(line)" :cx="line.x" :cy="line.y" r="7" fill="darkgrey" />
       <circle @mousedown.left.stop="deleteLine(line.id)" :cx="line.deleteBtn.x" :cy="line.deleteBtn.y" r="7" fill="red" />

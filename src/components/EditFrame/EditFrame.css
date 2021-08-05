@@ -1,0 +1,63 @@
+.edit-frame {
+  visibility: hidden;
+  display: block;
+  position: absolute;
+  height: 130%;
+  width: 130%;
+}
+
+.step-node.selected .edit-frame {
+  visibility: visible;
+}
+
+.edit-frame.efc {
+  height: 15px;
+  width: 15px;
+  cursor: nesw-resize;
+}
+
+.efc.tl {
+  top: -5px;
+  left: -5px;
+  cursor: nwse-resize;
+}
+
+.efc.tr {
+  top: -5px;
+  right: -5px;
+}
+
+.efc.br {
+  bottom: -5px;
+  right: -5px;
+  transform-origin: center;
+  cursor: nwse-resize;
+}
+
+.efc.bl {
+  bottom: -5px;
+  left: -5px;
+  transform-origin: center;
+}
+
+.edit-frame.conn {
+  height: 15px;
+  width: 15px;
+}
+
+.conn {
+  cursor: pointer;
+}
+.conn.from {
+  left: -17px;
+}
+
+.conn.to {
+  right: -17px;
+}
+
+
+.st1{fill:#35449C;opacity:.3;}
+.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#BC2461;}
+.st3{fill:#0089CF;}
+.st4{fill:#FFFFFF;}

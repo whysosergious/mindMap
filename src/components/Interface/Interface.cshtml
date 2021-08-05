@@ -56,12 +56,12 @@
   <div id="minimap" class="ui-wrapper full-h">
     
   </div>
-  <div id="detailswindow" class="ui-wrapper full-hw hidden right">
-    
+  <div id="detailswindow" class="ui-wrapper full-hw tr-tr" :class="!ui.activeMenu && 'slide-right'">
+    <dev-menu></dev-menu>
   </div>
   <div id="bottombar" class="full-h">
-    <div class="ui-wrapper m-s-r">
-      <div class="button fl-c"><h4>Dev</h4></div>
+    <div @click="openDetailsWindow('dev')" class="ui-wrapper m-s-r">
+      <div class="button fl-c":class="ui.activeMenu === 'dev' && 'active'"><h4>Dev</h4></div>
     </div>
     <div class="ui-wrapper">
       <div class="button fl-c">

@@ -1,0 +1,14 @@
+#devmenu {
+  display: grid;
+  position: relative;
+  grid-template-rows: [title-row] calc(var(--fr-size) / 2) [tab-row] var(--fr-size) [node-row] auto [bottom-row] calc(var(--fr-size) / 1.5);
+  height: 100%;
+  width: 100%;
+}
+
+.text-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}

@@ -1,4 +1,4 @@
-import { _gc } from '/gc.js';
+import { _gc, _data } from '/gc.js';
 
 /** Node line canvas component */
 export default {
@@ -6,27 +6,43 @@ export default {
   },
   data() {
     return {
-      count: 0,
-      lines: {}
+      lines: _data.lines
     }
   },
   template: await _gc.getTemplate('NodeLines', true),
   methods: {
-    startDraw(ev) {
-      if (_gc.interface.ui.activeTool !== 'line')
+    startDraw(ev, conn = {}) {
+      if (_gc.interface.ui.activeTool !== 'line' && !conn.type)
         return;
+
+      // conn || (conn.type = null);
       
-      let id = `ugl${ this.count++ }`;
+      let id = `ugl${ ++_gc.count }`;
       this.lines[id] = {
         id,
         altClass: null,
-        x: ev.offsetX,
-        y: ev.offsetY,
-        ex: ev.offsetX,
-        ey: ev.offsetY,
-        count: 0,
+        x: conn.type === 'connto' ? conn.node.x + conn.node.w/2 : conn.type === 'connfrom' ? conn.node.x - 15 : ev.offsetX,
+        y: conn.type === 'connto' ? conn.node.y + conn.node.h/2 : conn.type === 'connfrom' ? conn.node.y + conn.node.h/2 : ev.offsetY,
+        ex: conn.type === 'connfrom' ? conn.node.x + conn.node.w/2 : conn.type === 'connto' ? conn.node.x + conn.node.w + 5 : ev.offsetX,
+        ey: conn.type === 'connfrom' ? conn.node.y + conn.node.h/2 : conn.type === 'connto' ? conn.node.y + conn.node.h/2 : ev.offsetY,
+        rel: {x:0,y:0,ex:0,ey:0},
         points: [],
         hitboxes: [],
+        deleteBtn: {
+          x: ev.offsetX,
+          y: ev.offsetY
+        },
+        optionsBtn: {
+          x: ev.offsetX,
+          y: ev.offsetY
+        },
+        vertex() {
+          let result = '';
+          this.points.forEach(point => {
+            result += `L ${ point.x } ${ point.y }`;
+          });
+          return result;
+        },
         genHitboxes() {
           if (this.points.length === 0) {
             this.hitboxes = [{
@@ -54,49 +70,80 @@ export default {
 
           setTimeout(()=>this.lineTools(),10);
         },
-        vertex() {
-          let result = '';
-          this.points.forEach(point => {
-            result += `L ${ point.x } ${ point.y }`;
-          });
-          return result;
-        },
-        deleteBtn: {
-          x: ev.offsetX,
-          y: ev.offsetY
-        },
-        optionsBtn: {
-          x: ev.offsetX,
-          y: ev.offsetY
-        },
         lineTools() {
           if (!this.el)
             this.el = document.getElementById(this.id)
 
-          this.deleteBtn = this.el.getPointAtLength(30);
-          this.optionsBtn = this.el.getPointAtLength(70);
+          let delBtnPoint = this.el.getPointAtLength(30)
+          this.deleteBtn = {
+            x: ~~delBtnPoint.x,
+            y: ~~delBtnPoint.y
+          };
+          let optBtnPoint = this.el.getPointAtLength(70)
+          this.optionsBtn = {
+            x: ~~optBtnPoint.x,
+            y: ~~optBtnPoint.y
+          };
         }
       }
 
-      this.setupListeners(this.drawTo, this.lines[id]);
+      this.lines[id].genHitboxes();
+
+      if (conn.type === 'connto') {
+        this.lines[id].connFrom = conn.node.id;
+        conn.node.linesTo[id] = {
+          lineId: id,
+          nodeId: null
+        }
+        this.setupListeners(this.drawTo, this.lines[id]);
+      } else if (conn.type === 'connfrom') {
+        this.lines[id].connTo = conn.node.id;
+        conn.node.linesFrom[id] = {
+          lineId: id,
+          nodeId: null
+        }
+        this.setupListeners(this.drawFrom, this.lines[id]);
+      } else {
+        this.setupListeners(this.drawTo, this.lines[id]);
+      }
+      console.log(_data.lines)
     },
     setupListeners(eventFunc, line, point) {
       let initFunc = (ev)=>eventFunc(ev, line, point),
-        endFunc = (ev)=>this.handleMouseUp(ev, line, initFunc);
+        endFunc = (ev)=>this.handleMouseUp(ev, line, initFunc, eventFunc.name);
 
       line.altClass = 'active';
       app.classList.add('drawing');
       linecanvas.addEventListener('mousemove', initFunc);
       window.addEventListener('mouseup', endFunc, { once: true });
     },
-    handleMouseUp(ev, line, eventFunc) {
+    handleMouseUp(ev, line, eventFunc, action) {
       app.classList.remove('drawing');
       line.altClass = null;
       line.genHitboxes();
       linecanvas.removeEventListener('mousemove', eventFunc);
 
       let target = document.elementFromPoint(ev.x, ev.y);
-      // console.log(target, ev.offsetX, ev.offsetY);
+      if (/drawTo/.test(action) && target.dataset.nodeid) {
+        line.connTo = target.dataset.nodeid;
+        if (line.connFrom) 
+          _data.nodes[line.connFrom].linesTo[line.id].nodeId = line.connTo;
+        
+        _data.nodes[target.dataset.nodeid].linesFrom[line.id] = {
+          lineId: line.id,
+          nodeId: line.connFrom
+        }
+      } else if (/drawFrom/.test(action) && target.dataset.nodeid) {
+        line.connFrom = target.dataset.nodeid;
+        if (line.connTo) 
+          _data.nodes[line.connTo].linesFrom[line.id].nodeId = line.connFrom;
+        _data.nodes[target.dataset.nodeid].linesTo[line.id] = {
+          lineId: line.id,
+          nodeId: line.connTo
+        }
+      }
+      line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
     },
     deleteLine(id) {
       delete this.lines[id];
@@ -107,16 +154,20 @@ export default {
       line.lineTools();
       line.x = ev.offsetX;
       line.y = ev.offsetY;
+
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
     },
     drawTo(ev, line) {
       line.lineTools();
       line.ex = ev.offsetX;
       line.ey = ev.offsetY;
+
+      line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
     },
     // ^^ *******************************
     newPoint(ev, line, index) {
       let point = {
-        id: `${ line.id }p${ line.count++ }`,
+        id: `${ line.id }p${ ++_gc.count }`,
         x: ev.offsetX,
         y: ev.offsetY
       }
@@ -135,6 +186,9 @@ export default {
       line.lineTools();
       point.x = ev.offsetX;
       point.y = ev.offsetY;
+
+      line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
     },
     moveStartPoint(line) {
       this.setupListeners(this.drawFrom, line);
@@ -144,7 +198,63 @@ export default {
     }
   },
   beforeMount() {
+    Object.values(_data.lines).forEach(line => {
+      line.genHitboxes = function() {
+        if (line.points.length === 0) {
+          line.hitboxes = [{
+            pointIndex: 0,
+            x: line.x,
+            y: line.y,
+            ex: line.ex,
+            ey: line.ey,
+          }];
+        } else {
+          line.hitboxes = [];
+          let count = line.points.length;
+          for (let i = 0; i <= count; i++) {
+            let hitbox = {
+              pointIndex: i,
+              x: i === 0 ? line.x : line.points[i-1].x,
+              y: i === 0 ? line.y : line.points[i-1].y,
+              ex: i === count ? line.ex : line.points[i].x,
+              ey: i === count ? line.ey : line.points[i].y
+            }
+
+            line.hitboxes.push(hitbox);
+          }
+        }
+
+        setTimeout(()=>line.lineTools(),10);
+      },
+      line.vertex = function() {
+        let result = '';
+        line.points.forEach(point => {
+          result += `L ${ point.x } ${ point.y }`;
+        });
+        return result;
+      }
+
+      line.lineTools = function() {
+        if (!line.el || Object.values(line.el).length === 0)
+          line.el = document.getElementById(line.id)
+
+        let delBtnPoint = line.el.getPointAtLength(30)
+        line.deleteBtn = {
+          x: ~~delBtnPoint.x,
+          y: ~~delBtnPoint.y
+        };
+        let optBtnPoint = line.el.getPointAtLength(70)
+        line.optionsBtn = {
+          x: ~~optBtnPoint.x,
+          y: ~~optBtnPoint.y
+        };
+      }
+    });
   },
   mounted() {
+    _gc.sharedMethods.startDraw = this.startDraw;
+    _data.lines = this.lines;
+
+    
   }
 }
