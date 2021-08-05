@@ -7,14 +7,23 @@ export default {
   data() {
     return {
       mmData: _data,
+      parsedMMData: '',
       ui: _gc.interface.ui
     }
   },
   template: await _gc.getTemplate('DevMenu', true),
+  computed: {
+  },
   methods: {
+    parseMMData() {
+      this.parsedMMData = JSON.stringifyMap(this.mmData);
+      return this.parsedMMData;
+    }
   },
   beforeMount() {
+    this.parseMMData();
   },
   mounted() {
+    _gc.dev.parseMMData = this.parseMMData;
   }
 }

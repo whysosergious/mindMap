@@ -1,27 +1,36 @@
 <svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" xmlns="http://www.w3.org/2000/svg">
   <template v-for="(line, index) in lines" :key="index">
     <g class="node-path" :class="line.altClass" v-if="typeof line === 'object'">
-      <path stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />
+      <path class="main-path" stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />
       <g v-for="(hitbox, index) in line.hitboxes" :key="index">
-        <circle v-if="index !== 0" :cx="hitbox.x" :cy="hitbox.y" r="14" fill="#57105205" />
-        <path @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" stroke="#57105203" stroke-width="27" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
+        <circle class="hb circle" v-if="index !== 0" :cx="hitbox.x" :cy="hitbox.y" r="14" />
+        <path class="hb path" @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
       </g>
       <g class="path-ui">
-        <circle @mousedown.left.stop="moveStartPoint(line)" :cx="line.x + line.rel.x" :cy="line.y + line.rel.y" r="6" fill="#920072" />
-        <circle @mousedown.left.stop="deleteLine(line.id)" :cx="line.deleteBtn.x" :cy="line.deleteBtn.y" r="7" fill="red" />
+        <g @mousedown.left.stop="moveStartPoint(line)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.x + line.rel.x }px, ${ line.y + line.rel.y }px, 0)`">
+          <circle class="hvr-tgt" r="6" fill="#920072" />
+          <circle class="hb circle" r="17"/>
+        </g>
+        <g @mousedown.left.stop="deleteLine(line.id)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.deleteBtn.x }px, ${ line.deleteBtn.y }px, 0)`">
+          <circle class="hvr-tgt" r="7" fill="red" />
+          <circle class="hb circle" r="14"/>
+        </g>
+        
         <template v-for="(point, index) in line.points" :key="index">
-          <g class="point-group">
-            <circle :cx="point.x" :cy="point.y" r="24" fill="#57105205" />
-            <circle @mousedown.left.stop="initMovePoint(line, point)" :id="point.id" :cx="point.x" :cy="point.y" r="6" fill="#920072" />
-            <circle class="point-option" @mousedown.left.stop="deletePoint(line, index)" :cx="point.x + 12" :cy="point.y - 12" r="5" fill="red" />
+          <g class="point-group hvr-scale-xs" :style="`transform: translate3d(${ point.x }px, ${ point.y }px, 0)`">
+            <circle class="hb circle" r="22" fill="#57105215" />
+            <circle class="hvr-tgt" @mousedown.left.stop="initMovePoint(line, point)" :id="point.id" r="6" fill="#920072" />
+            <circle class="point-option" @mousedown.left.stop="deletePoint(line, index)" :cx="+12" :cy="-12" r="5" fill="red" />
           </g>
         </template>
       </g>
-      <g @mousedown.left.stop="moveEndPoint(line)">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="12" width="12" :x="line.ex - line.rel.ex - 6" :y="line.ey - line.rel.ey - 6" viewBox="0 0 60 60">
+      <g @mousedown.left.stop="moveEndPoint(line)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.ex - line.rel.ex }px, ${ line.ey - line.rel.ey }px, 0)`">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="12" width="12" :x="-6" :y="-6" viewBox="0 0 60 60">
+          <g class="hvr-tgt to-c">
             <path class="arrow" fill="darkcyan" :style="`transform: rotate(${ line.rel.ed }deg)`" d="M32.4,5h20.3c1.2,0,1.9,1.2,1.5,2.2L29.6,30l24.6,22.8c0.6,1-0.3,2.2-1.5,2.2H32.3c-0.6,0-1.2-0.3-1.5-0.9L5.6,30L30.9,5.9 C31.2,5.3,31.8,5,32.4,5z"/>
+          </g>
         </svg>
-        <circle :cx="line.ex - line.rel.ex" :cy="line.ey - line.rel.ey" r="12" fill="#92007200" />
+        <circle class="hb circle" r="17"/>
       </g>
     </g>
   </template>

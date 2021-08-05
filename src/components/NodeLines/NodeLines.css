@@ -1,9 +1,9 @@
 .path-ui,
 .point-group,
 .point-option {
-  /* visibility: hidden; */
+  visibility: hidden;
   opacity: 0;
-  transition: opacity .15s ease .15s, visibility 0s ease .3s;
+  transition: opacity .07s ease .14s, visibility 0s ease .6s;
 }
 
 .node-path:hover :is(.point-group, .path-ui),
@@ -15,4 +15,18 @@
 
 .arrow {
   transform-origin: center;
+}
+
+
+.hb {
+  --dev-hb: #57105200;
+}
+
+.hb.circle {
+  fill: var(--dev-hb);
+}
+
+.hb.path {
+  stroke: var(--dev-hb);
+  stroke-width: 27px;
 }

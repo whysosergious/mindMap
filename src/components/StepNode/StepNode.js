@@ -55,60 +55,67 @@ export default {
         x: 0,
         oy: ev.y,
         ox: ev.x,
+        noy: this.$props.node.y,
+        nox: this.$props.node.x,
+        noh: this.$props.node.h,
+        now: this.$props.node.w
       }
 
 
       const handleResize = ev => {
         let { $props: { node }, mod, lv } = this;
         mod = mod();
+
+        let y = lv.oy - ev.y,
+          x = lv.ox - ev.x,
+          update = false;
+
+        if (node.w <= 400 && node.w > 50) {
+          update = true;
+        }
   
-        if (origin === 'tl') {
-          node.y -= (lv.oy - ev.y)*mod - lv.y;
-          node.x -= (lv.ox - ev.x)*mod - lv.x;
-          node.h += (lv.oy - ev.y)*mod - lv.y;
-          node.w += (lv.ox - ev.x)*mod - lv.x;
+
+        if (/br|bl/.test(origin) && lv.noh - y <= 400 && lv.noh - y >= 50) {
+          node.h = lv.noh - y;
+        }
+        if (/tr|tl/.test(origin)&& lv.noh + y <= 400 && lv.noh + y >= 50) {
+          node.y = lv.noy - y;
+          node.h = lv.noh + y;
         }
 
-        if (origin === 'tr') {
-          node.y -= (lv.oy - ev.y)*mod - lv.y;
-          node.h += (lv.oy - ev.y)*mod - lv.y;
-          node.w -= (lv.ox - ev.x)*mod - lv.x;
+        if (/tl|bl/.test(origin) && lv.now + x <= 400 && lv.now + x >= 50) {
+          node.x = lv.nox - x;
+          node.w = lv.now + x;
         }
-
-        if (origin === 'br') {
-          node.h -= (lv.oy - ev.y)*mod - lv.y;
-          node.w -= (lv.ox - ev.x)*mod - lv.x;
-        }
-
-        if (origin === 'bl') {
-          node.x -= (lv.ox - ev.x)*mod - lv.x;
-          node.h -= (lv.oy - ev.y)*mod - lv.y;
-          node.w += (lv.ox - ev.x)*mod - lv.x;
+        if (/tr|br/.test(origin) && lv.now - x <= 400 && lv.now - x >= 50) {
+          node.w = lv.now - x;
         }
           
-        lv.y = (lv.oy - ev.y)*mod;
-        lv.x = (lv.ox - ev.x)*mod;
-  
-        // console.log('o ', node.w, node.h);
-        this.updateSize();
-        this.updatePos();
+        if (update) {
+          this.updateSize();
+          this.updatePos();
 
-        Object.values(this.$props.node.linesTo).forEach(({ lineId, nodeId }) => {
-          let line = _data.lines[lineId];
-          line.lineTools();
-          line.y = node.y + node.h/2;
-          line.x = node.x + node.w/2;
-          _gc.sharedMethods.calcRelPoint(line);
-        });
-  
-        Object.values(this.$props.node.linesFrom).forEach(({ lineId, nodeId }) => {
-          let line = _data.lines[lineId];
-          line.lineTools();
-          line.ey = node.y + node.h/2;
-          line.ex = node.x + node.w/2;
+          Object.values(this.$props.node.linesTo).forEach(({ lineId, nodeId }) => {
+            let line = _data.lines[lineId];
 
-          _gc.sharedMethods.calcRelEndPoint(line); 
-        });
+            line.lineTools();
+            line.y = node.y + node.h/2;
+            line.x = node.x + node.w/2;
+
+            _gc.sharedMethods.calcRelPoint(line);
+            line.points.length === 0 && _gc.sharedMethods.calcRelRotation(line);
+          });
+    
+          Object.values(this.$props.node.linesFrom).forEach(({ lineId, nodeId }) => {
+            let line = _data.lines[lineId];
+
+            line.lineTools();
+            line.ey = node.y + node.h/2;
+            line.ex = node.x + node.w/2;
+
+            _gc.sharedMethods.calcRelEndPoint(line); 
+          });
+        }
       }
       
       window.addEventListener('mousemove', handleResize);
@@ -173,12 +180,13 @@ export default {
 
         if (!line)
           return;
-          
+
         line.lineTools();
         line.y = node.y + node.h/2;
         line.x = node.x + node.w/2;
         line.connFrom && _gc.sharedMethods.calcRelPoint(line);
-        line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
+        line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
+        line.points.length === 0 && _gc.sharedMethods.calcRelRotation(line);
       });
 
       Object.values(this.$props.node.linesFrom).forEach(({ lineId, nodeId }) => {
@@ -236,9 +244,10 @@ export default {
         offX = this.lv.ox - ev.x;
 
       if (this.select && (offY < 10 && offY > -10) && (offX < 10 && offX > -10)) {
-        _gc.selected && _gc.selected.classList.remove('selected');
+        _gc.selected.el && _gc.selected.el.classList.remove('selected');
         this.$el.classList.add('selected');
-        _gc.selected = this.$el;
+        _gc.selected.el = this.$el;
+        _gc.selected.node = node;
       }
     }
   },

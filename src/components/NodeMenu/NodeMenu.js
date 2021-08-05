@@ -59,9 +59,9 @@ export default {
         innerOffX: (-20 + (viewport.offsetWidth * .015)) + ev.offsetX * (1-clone.z/perspective) + el.offsetWidth*(1+clone.z/perspective)/clone.mods.multiplier*(1+clone.z/perspective)
       }
 
-      console.log(viewport.offsetWidth * .01)
-      console.log(2 + ev.offsetX * (1-clone.z/perspective) + el.offsetWidth*(1+clone.z/perspective)/clone.mods.multiplier*(1+clone.z/perspective));
-      console.log(-5 + ev.offsetY * (1-clone.z/perspective) + el.offsetHeight*(1+clone.z/perspective)/clone.mods.multiplier*(1+clone.z/perspective));
+      // console.log(viewport.offsetWidth * .01)
+      // console.log(2 + ev.offsetX * (1-clone.z/perspective) + el.offsetWidth*(1+clone.z/perspective)/clone.mods.multiplier*(1+clone.z/perspective));
+      // console.log(-5 + ev.offsetY * (1-clone.z/perspective) + el.offsetHeight*(1+clone.z/perspective)/clone.mods.multiplier*(1+clone.z/perspective));
 
       el.classList.add('dragging');
       let handleMove = (ev)=>this.handleMove(ev, clone);

@@ -42,6 +42,13 @@
   padding: 10px;
 }
 
+.button.disabled {
+  pointer-events: none;
+}
+.button.disabled {
+  opacity: .3;
+}
+
 .button img {
   opacity: .7;
 }

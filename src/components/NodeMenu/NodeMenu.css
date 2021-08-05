@@ -31,6 +31,19 @@
   background-color: rgb(39, 64, 85);
 }
 
+.title-row h4 {
+  text-align: center;
+  max-width: calc(100% - 40px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title-row span {
+  font-weight: 200;
+  color: rgb(229, 248, 240)
+}
+
 .node-tabs {
   display: flex;
   grid-row: tab-row;
@@ -49,9 +62,7 @@
 }
 
 .search-bar {
-  grid-row: search-row;
-  padding-left: 6px;
-  
+  grid-row: search-row;  
 }
 
 .search-bar img {

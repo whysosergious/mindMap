@@ -21,15 +21,18 @@ export default {
         scrX: 0,
         canZ: 0
       },
+      contextMenu: _gc.interface.contextMenu,
       nodeMenu: _gc.interface.nodeMenu,
       nodes: _data.nodes,
       nodeHooks: {
         updatePos: {}
-      }
+      },
+      selected: _gc.selected
     }
   },
   template: await _gc.getTemplate('Viewport'),
   components: {
+    ContextMenu,
     NodeMenu,
     Interface,
     NodeLines,
@@ -39,16 +42,36 @@ export default {
     addNode(node) {
       this.nodes[node.id] = node;
     },
-    closeOpenWindows(ev) {
-      if (ev.target.id !== 'linecanvas' && ev.target.tag !== 'circle')
+    deleteNode(node) {
+      Object.values(node.linesFrom).forEach(({ lineId, nodeId }) => {
+        _data.nodes[nodeId] && delete _data.nodes[nodeId].linesTo[lineId];
+        _data.lines[lineId] && delete _data.lines[lineId];
+      });
+      Object.values(node.linesTo).forEach(({ lineId, nodeId }) => {
+        _data.nodes[nodeId] && delete _data.nodes[nodeId].linesFrom[lineId];
+        _data.lines[lineId] && delete _data.lines[lineId];
+      });
+      delete _data.nodes[node.id];
+      
+      Object.keys(_data.nodes).length === 0 && _gc.dev.parseMMData()
+
+      this.closeOpenWindows(null, true);
+    },
+    closeOpenWindows(ev, force=false) {
+      if (!force && ev.target.id !== 'linecanvas' && ev.target.tag !== 'circle')
         return;
 
-      this.nodeMenu.show = false;
-      this.nodeMenu.x = 0;
-      this.nodeMenu.y = 0;
+      this.contextMenu.show = false;
 
-      _gc.selected && _gc.selected.classList.remove('selected');
-      _gc.selected = null;
+      if (!this.nodeMenu.keep) {
+        this.nodeMenu.show = false;
+        this.nodeMenu.x = 0;
+        this.nodeMenu.y = 0;
+      }
+
+      _gc.selected.el && _gc.selected.el.classList.remove('selected');
+      _gc.selected.el = null;
+      _gc.selected.node = null;
     },
     startDraw(type) {
       console.log(type)
@@ -58,6 +81,8 @@ export default {
   },
   mounted() {
     _gc.interface.nodeMenu = this.nodeMenu;
+    _gc.interface.contextMenu = this.contextMenu;
+    _gc.interface.ui.closeAllSoftWindows = this.closeOpenWindows;
     let vph = viewport.offsetHeight,
       vpw = viewport.offsetWidth;
 
@@ -78,20 +103,33 @@ export default {
     // custom input actions
     viewport.addEventListener('contextmenu', ev => {
       ev.preventDefault();
+      this.closeOpenWindows(ev, true);
 
-      let placeableX = vpw - nodemenu.offsetWidth,
+      let nodeId = ev.target.dataset.nodeid,
+      menu, placeableX, placeableY;
+
+      if (ev.target.dataset.nodeid) {
+        menu = this.contextMenu;
+        placeableX = vpw - contextmenu.offsetWidth;
+        placeableY = vph - contextmenu.offsetHeight;
+        _gc.selected.node = _data.nodes[nodeId];
+      } else {
+        menu = this.nodeMenu;
+        placeableX = vpw - nodemenu.offsetWidth;
         placeableY = vph - nodemenu.offsetHeight;
+        menu.keep = false;
+      }
 
-      this.nodeMenu.x = ev.x > placeableX ? placeableX : ev.x;
-      this.nodeMenu.y = ev.y > placeableY ? placeableY : ev.y;
-      this.nodeMenu.show = true;
-
-      
+      menu.x = ev.x > placeableX ? placeableX : ev.x;
+      menu.y = ev.y > placeableY ? placeableY : ev.y;
+      menu.show = true;
     });
 
     const { offset } = this;
     let mod;
     const handleNavigation = ev => {
+      this.closeOpenWindows(ev, true);
+
       let soy = (ev.y - vph/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
           sox = (ev.x - vpw/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
           delta = ev.deltaY;
@@ -184,7 +222,7 @@ export default {
       
     }
 
-    // viewport.addEventListener('scroll', handleNavigation, { passive: false, capture: false });
+    viewport.addEventListener('scroll', handleNavigation, { passive: false, capture: false });
     canvas.addEventListener('wheel', handleNavigation, { passive: false, capture: false });
     // viewport.addEventListener('touchmove', handleNavigation, { passive: false, capture: false });
     

@@ -3,7 +3,7 @@
     <div class="button fl-c">
       <img src="src/assets/vector/files/ui/save.svg" alt="ui icon"/>
     </div>
-        <div class="button fl-c">
+    <div class="button fl-c">
       <img src="src/assets/vector/files/ui/open.svg" alt="ui icon"/>
     </div>
     <div class="button fl-c">
@@ -40,7 +40,7 @@
     <div @click="selectTool('cursor')" class="button fl-c" :class="ui.activeTool === 'cursor' && 'active'">
       <img src="src/assets/vector/files/ui/cursor.svg" alt="ui icon"/>
     </div>
-    <div @click="openNodeMenu" class="button fl-c">
+    <div @click="openNodeMenu" class="button fl-c" :class="nodeMenu.keep && 'active'">
       <img src="src/assets/vector/files/ui/add.svg" alt="ui icon"/>
     </div>
     <div @click="selectTool('line')" class="button fl-c" :class="ui.activeTool === 'line' && 'active'">

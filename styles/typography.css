@@ -18,3 +18,15 @@ h5 {
   font-size: .75rem;
   font-weight: 300;
 }
+
+
+/* shared */
+.txt-al-l {
+  text-align: left;
+}
+.txt-al-c {
+  text-align: center;
+}
+.txt-al-r {
+  text-align: right;
+}

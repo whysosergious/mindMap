@@ -1,5 +1,6 @@
 // global controller
 export const _gc = {
+  dev: {},
   templates: {},
   viewport: {
     perspective: 400,
@@ -24,13 +25,23 @@ export const _gc = {
   interface: {
     ui: {
       activeTool: 'cursor',
-      activeMenu: 'dev' // null this
+      activeMenu: 'dev', // null this
+      closeAllSoftWindows: null
     },
     nodeMenu: {
       x: 0,
       y: 0,
       show: false
+    },
+    contextMenu: {
+      x: 0,
+      y: 0,
+      show: false
     }
+  },
+  selected: {
+    el: null,
+    node: null
   },
   sharedMethods: {
     calcRelPoint(line) {
@@ -63,7 +74,7 @@ export const _gc = {
         x = line.points.length === 0 ? line.x : line.points[line.points.length-1].x;
       }
 
-      line.rel.ed = Math.atan2(y - line.ey, x - line.ex) * 180 / Math.PI;
+      line.rel.ed = ~~(Math.atan2(y - line.ey, x - line.ex) * 180 / Math.PI);
     }
   }
 }

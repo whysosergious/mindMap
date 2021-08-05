@@ -119,7 +119,6 @@ export default {
     handleMouseUp(ev, line, eventFunc, action) {
       app.classList.remove('drawing');
       line.altClass = null;
-      line.genHitboxes();
       linecanvas.removeEventListener('mousemove', eventFunc);
 
       let target = document.elementFromPoint(ev.x, ev.y);
@@ -150,12 +149,16 @@ export default {
         line.x = _data.nodes[line.connFrom].x + _data.nodes[line.connFrom].w/2;
         line.y = _data.nodes[line.connFrom].y + _data.nodes[line.connFrom].h/2;
       }
+
+      line.genHitboxes();
       line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
       line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
     },
     deleteLine(id) {
+      let line = this.lines[id];
+      line.connFrom && delete _data.nodes[line.connFrom].linesTo[id];
+      line.connTo && delete _data.nodes[line.connTo].linesFrom[id];
       delete this.lines[id];
-      console.log(this.lines, id)
     },
     // these need to be joined *********
     drawFrom(ev, line) {
@@ -172,6 +175,7 @@ export default {
       line.y = ev.offsetY;
 
       line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
+      line.points.length === 0 && _gc.sharedMethods.calcRelRotation(line);
     },
     drawTo(ev, line) {
       line.lineTools();
@@ -185,7 +189,7 @@ export default {
       line.rel.ey = 0;
       line.ex = ev.offsetX;
       line.ey = ev.offsetY;
-
+      console.log('ffsdsf')
       line.connFrom && _gc.sharedMethods.calcRelPoint(line);
       _gc.sharedMethods.calcRelRotation(line);
     },
@@ -213,7 +217,8 @@ export default {
       point.y = ev.offsetY;
 
       line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
-      line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
+      _gc.sharedMethods.calcRelRotation(line); 
     },
     moveStartPoint(line) {
       this.setupListeners(this.drawFrom, line);
