@@ -1,0 +1,253 @@
+{
+  "ugn2": {
+    "odrinal": 0,
+    "label": "Plan Event",
+    "type": "setup",
+    "value": "My Event ID",
+    "data": {},
+    "steps": [
+      "ugn4"
+    ]
+  },
+  "ugn4": {
+    "odrinal": 1,
+    "label": "1 month prior",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn3"
+    ]
+  },
+  "ugn3": {
+    "odrinal": 2,
+    "label": "Prep Invitation",
+    "type": "setup",
+    "value": "My Issue",
+    "data": {},
+    "steps": [
+      "ugn26",
+      "ugn9"
+    ]
+  },
+  "ugn26": {
+    "odrinal": 3,
+    "label": "3 weeks prior",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn6"
+    ]
+  },
+  "ugn6": {
+    "odrinal": 4,
+    "label": "Open Registration",
+    "type": "setup",
+    "value": "My Form ID",
+    "data": {},
+    "steps": [
+      "ugn29"
+    ]
+  },
+  "ugn29": {
+    "odrinal": 5,
+    "label": "Attending Segment",
+    "type": "process",
+    "data": {},
+    "steps": [
+      "ugn7"
+    ]
+  },
+  "ugn7": {
+    "odrinal": 6,
+    "label": "3 days prior",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn8"
+    ]
+  },
+  "ugn8": {
+    "odrinal": 7,
+    "label": "Prep Message",
+    "type": "setup",
+    "value": "My Message ID",
+    "data": {},
+    "steps": [
+      "ugn5"
+    ]
+  },
+  "ugn5": {
+    "odrinal": 8,
+    "label": "Send Message",
+    "type": "process",
+    "data": {},
+    "steps": [
+      "ugn12"
+    ]
+  },
+  "ugn12": {
+    "odrinal": 9,
+    "label": "Event Start",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn21",
+      "ugn13",
+      "ugn11"
+    ]
+  },
+  "ugn21": {
+    "odrinal": 10,
+    "label": "Informational Message",
+    "type": "setup",
+    "value": "My Message ID",
+    "data": {},
+    "steps": [
+      "ugn22"
+    ]
+  },
+  "ugn22": {
+    "odrinal": 11,
+    "label": "Send Information",
+    "type": "process",
+    "data": {},
+    "steps": []
+  },
+  "ugn13": {
+    "odrinal": 12,
+    "label": "Informational Email",
+    "type": "setup",
+    "value": "My Issue",
+    "data": {},
+    "steps": [
+      "ugn22"
+    ]
+  },
+  "ugn11": {
+    "odrinal": 13,
+    "label": "Event in Progress",
+    "type": "setup",
+    "value": "My Event ID",
+    "data": {},
+    "steps": [
+      "ugn14"
+    ]
+  },
+  "ugn14": {
+    "odrinal": 14,
+    "label": "Event End",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn15"
+    ]
+  },
+  "ugn15": {
+    "odrinal": 15,
+    "label": "Segment Invitation List",
+    "type": "process",
+    "data": {},
+    "steps": [
+      "ugn16",
+      "ugn18",
+      "ugn19",
+      "ugn17"
+    ]
+  },
+  "ugn16": {
+    "odrinal": 16,
+    "label": "Bounced email",
+    "type": "state",
+    "data": {},
+    "steps": []
+  },
+  "ugn18": {
+    "odrinal": 17,
+    "label": "Email error",
+    "type": "state",
+    "data": {},
+    "steps": []
+  },
+  "ugn19": {
+    "odrinal": 18,
+    "label": "Attended",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn27"
+    ]
+  },
+  "ugn27": {
+    "odrinal": 19,
+    "label": "Wait 1 Day",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn20"
+    ]
+  },
+  "ugn20": {
+    "odrinal": 20,
+    "label": "Survey",
+    "type": "setup",
+    "value": "My Survey ID",
+    "data": {},
+    "steps": [
+      "ugn28"
+    ]
+  },
+  "ugn28": {
+    "odrinal": 21,
+    "label": "Wait 1 Year",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn2"
+    ]
+  },
+  "ugn17": {
+    "odrinal": 22,
+    "label": "Opened email",
+    "type": "state",
+    "data": {},
+    "steps": [
+      "ugn27"
+    ]
+  },
+  "ugn9": {
+    "odrinal": 23,
+    "label": "Send email",
+    "type": "process",
+    "data": {},
+    "steps": [
+      "ugn126"
+    ]
+  },
+  "ugn126": {
+    "odrinal": 24,
+    "label": "If",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn24"
+    ]
+  },
+  "ugn24": {
+    "odrinal": 25,
+    "label": "Email error",
+    "type": "state",
+    "data": {},
+    "steps": [
+      "ugn25"
+    ]
+  },
+  "ugn25": {
+    "odrinal": 26,
+    "label": "Wait 1 day",
+    "type": "modifier",
+    "data": {},
+    "steps": [
+      "ugn3"
+    ]
+  }
+}

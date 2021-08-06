@@ -26,6 +26,9 @@
 }
 
 /* margins */
+.m-xs-b {
+  margin-bottom: 3px;
+}
 .m-s-t {
   margin-top: 6px;
 }

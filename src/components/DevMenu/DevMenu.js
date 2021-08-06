@@ -8,7 +8,8 @@ export default {
     return {
       mmData: _data,
       parsedMMData: '',
-      ui: _gc.interface.ui
+      ui: _gc.interface.ui,
+      activeTab: 'mindmap'
     }
   },
   template: await _gc.getTemplate('DevMenu', true),
@@ -16,8 +17,15 @@ export default {
   },
   methods: {
     parseMMData() {
-      this.parsedMMData = JSON.stringifyMap(this.mmData);
+      if (this.activeTab === 'mindmap')
+        this.parsedMMData = JSON.stringifyMap(this.mmData);
+      else if (this.activeTab === 'actionmap')
+        this.parsedMMData = _gc.sharedMethods.parseActionData(this.mmData);
+
       return this.parsedMMData;
+    },
+    displayData(tab) {
+      this.activeTab = tab;
     }
   },
   beforeMount() {

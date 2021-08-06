@@ -68,19 +68,18 @@ export default {
       window.addEventListener('mousemove', handleMove);
       canvas.addEventListener('mouseup', (ev)=>{
         app.classList.remove('drawing');
-        let newNode = {
-          id: `ugn${ ++_data.count }`,
-          label: node.label,
-          icon: node.icon,
-          h: 100,
-          w: 100,
-          y: (ev.offsetY - this.lv.innerOffY) - ((ev.y * (1+clone.z/perspective) - ev.y) - viewport.offsetHeight*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)),
-          x: (ev.offsetX - this.lv.innerOffX) - ((ev.x * (1+clone.z/perspective) - ev.x) - viewport.offsetWidth*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)),
-          z: clone.z,
-          linesTo: {},
-          linesFrom: {}
-        }
-        // console.log('n ', newNode.x, newNode.y);
+
+        let newNode = JSON.parse(JSON.stringify(node));
+        newNode.id = `ugn${ ++_data.count }`;
+        newNode.h = _gc.defaults.nodes[node.type].h;
+        newNode.w = _gc.defaults.nodes[node.type].w;
+        // TODO redo this is way off
+        newNode.x = ~~((ev.offsetX - this.lv.innerOffX) - ((ev.x * (1+clone.z/perspective) - ev.x) - viewport.offsetWidth*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)));
+        newNode.y = ~~((ev.offsetY - this.lv.innerOffY) - ((ev.y * (1+clone.z/perspective) - ev.y) - viewport.offsetHeight*(1-clone.z/perspective)/clone.mods.multiplier*(1-clone.z/perspective)));
+        newNode.z = clone.z;
+        newNode.linesTo = {}
+        newNode.linesFrom = {}
+
         this.$props.addNode(newNode);
         el.classList.remove('dragging');
         clone.remove();

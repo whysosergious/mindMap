@@ -20,7 +20,8 @@ export default {
     node: Object,
     bg: String,
     cz: Number,
-    hooks: Object
+    hooks: Object,
+    initialNodeId: String
   },
   setup(props) {
     // temp obj simulating fetched values
@@ -41,6 +42,10 @@ export default {
 
       // css
       // scopedCSS, cssVals
+    }
+  },
+  data() {
+    return {
     }
   },
   template: await _gc.getTemplate('StepNode', true),
@@ -66,8 +71,8 @@ export default {
         let { $props: { node }, mod, lv } = this;
         mod = mod();
 
-        let y = lv.oy - ev.y,
-          x = lv.ox - ev.x,
+        let y = (lv.oy - ev.y)*mod,
+          x = (lv.ox - ev.x)*mod,
           update = false;
 
         if (node.w <= 400 && node.w > 50) {

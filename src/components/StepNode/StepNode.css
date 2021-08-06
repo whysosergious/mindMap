@@ -17,21 +17,31 @@
   /* transform: translate3d(var(--pos), 0); */
 }
 
-.step-node img {
+.node-icon {
   max-height: 100%;
   max-width: 100%;
 }
 
-.step-node h4 {
+.floating-container {
   position: absolute;
+  width: clamp(5rem, 100%, 14rem);
+}
+.floating-container.top {
+  bottom: calc(100% + .4rem);
+}
+
+.init-star {
+  position: absolute;
+  height: 1.4rem;
+  width: 1.4rem;
   bottom: 100%;
-  min-width: 100%;
-  width: 7rem;
-  max-width: 13rem;
+}
+
+.step-node h4 {
   font-weight: 400;
   text-align: center;
+  width: 100%;
   color: rgb(10, 6, 6);
-  margin-bottom: .4rem;
 
   pointer-events: none;
 }

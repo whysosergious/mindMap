@@ -2,11 +2,14 @@
   <div class="title-row fl-c">
     <h4>Node <span>{{ selected.node && selected.node.label }}</span></h4>
   </div>
-  <div class="search-bar brdr-xs-t fl-c fd-col" v-if="selected.node">
+  <div class="search-bar brdr-xs-t fl-c fd-col m-xs-b" v-if="selected.node">
     <h4 class="full-w txt-al-l m-s-t m-m-l">Label:</h4>
     <input type="text" v-model="selected.node.label"/>
   </div>
   <div class="row-list brdr-xs-t">
+    <div @click.stop="handleMakeInitial" class="button full-w fl-c">
+      <h4 class="full-w">Make initial</h4>
+    </div>
     <div class="button disabled full-w fl-c">
       <h4 class="full-w">Copy</h4>
     </div>

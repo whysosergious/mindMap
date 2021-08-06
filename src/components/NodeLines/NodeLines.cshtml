@@ -1,4 +1,5 @@
-<svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" 
+  version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <template v-for="(line, index) in lines" :key="index">
     <g class="node-path" :class="line.altClass" v-if="typeof line === 'object'">
       <path class="main-path" stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />

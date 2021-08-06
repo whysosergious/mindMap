@@ -37,6 +37,7 @@
 }
 
 .button {
+  color: rgb(82, 134, 128);
   height: var(--fr-size);
   width: var(--fr-size);
   padding: 10px;
@@ -63,6 +64,7 @@
 
 .button:hover:not(.active) {
   background-color: rgb(237, 244, 245);
+  color: rgb(28, 53, 50);
 }
 
 #topbar {

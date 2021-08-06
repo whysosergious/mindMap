@@ -8,18 +8,19 @@
 </style>
 <g>
 	
-		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="43.4851" y1="282.514" x2="16.4456" y2="253.5177" gradientTransform="matrix(1 0 0 1 0 -238)">
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="48.5603" y1="-227.9572" x2="11.381" y2="-188.0872" gradientTransform="matrix(1 0 0 -1 0 -178)">
 		<stop  offset="0" style="stop-color:#030305"/>
 		<stop  offset="0.5" style="stop-color:#343334"/>
 		<stop  offset="1" style="stop-color:#343334"/>
 	</linearGradient>
-	<path class="st0" d="M10.4,29L29,10.4c0.6-0.6,1.4-0.6,2,0L49.5,29c0.6,0.6,0.6,1.4,0,2L31,49.6c-0.6,0.6-1.4,0.6-2,0L10.4,31
-		C9.8,30.4,9.8,29.6,10.4,29z"/>
+	<path class="st0" d="M3.1,28.6L28.6,3c0.8-0.8,1.9-0.8,2.8,0l25.4,25.6c0.8,0.8,0.8,1.9,0,2.8L31.4,57c-0.8,0.8-1.9,0.8-2.8,0
+		L3.1,31.4C2.2,30.5,2.2,29.5,3.1,28.6z"/>
 	
-		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="25.7842" y1="35.348" x2="31.2339" y2="29.5542" gradientTransform="matrix(1 0 0 -1 0 62)">
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="24.2343" y1="-16.615" x2="31.7276" y2="-8.6486" gradientTransform="matrix(1 0 0 1 0 42)">
 		<stop  offset="0" style="stop-color:#E5E7E5"/>
 		<stop  offset="1" style="stop-color:#FFFFFF"/>
 	</linearGradient>
-	<path class="st1" d="M37,29.6L27,23c-0.1-0.1-0.3-0.1-0.5,0v13.4c0.1,0.1,0.3,0.1,0.5,0l10-6.6C37.2,29.8,37.2,29.7,37,29.6z"/>
+	<path class="st1" d="M39.6,29.5l-13.8-9.1c-0.1-0.1-0.4-0.1-0.7,0v18.4c0.1,0.1,0.4,0.1,0.7,0l13.8-9.1
+		C39.9,29.7,39.9,29.6,39.6,29.5z"/>
 </g>
 </svg>

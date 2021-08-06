@@ -5,7 +5,7 @@
   top: 140px;
   left: 60px;
   grid-template-rows: [title-row] calc(var(--fr-size) / 2) [tab-row] var(--fr-size) [search-row] 36px [node-row] auto [bottom-row] calc(var(--fr-size) / 1.5);
-  width: calc(var(--fr-size)*11);
+  width: calc(var(--fr-size)*9);
   background-color: white;
   border-radius: 4px;
 
@@ -90,7 +90,7 @@
   position: relative;
   height: calc(var(--fr-size) * 8.5);
   padding: 0 10px;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: calc(var(--fr-size) * 2.7);
   overflow: auto;
 }

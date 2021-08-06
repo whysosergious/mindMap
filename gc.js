@@ -1,3 +1,7 @@
+// temp data
+import { testdata } from "./data/ex.js";
+
+
 // global controller
 export const _gc = {
   dev: {},
@@ -39,6 +43,26 @@ export const _gc = {
       show: false
     }
   },
+  defaults: {
+    nodes: {
+      setup: {
+        h: 100,
+        w: 100
+      },
+      process: {
+        h: 80,
+        w: 80
+      },
+      state: {
+        h: 80,
+        w: 80
+      },
+      modifier: {
+        h: 60,
+        w: 60
+      }
+    }
+  },
   selected: {
     el: null,
     node: null
@@ -75,6 +99,42 @@ export const _gc = {
       }
 
       line.rel.ed = ~~(Math.atan2(y - line.ey, x - line.ex) * 180 / Math.PI);
+    },
+    parseActionData: obj => {
+      let cache = {},
+        result = {},
+        nodes = obj.nodes,
+        stepCount = 0;
+    
+      const parse = (nextId, prevId) => {
+        let node = nodes[nextId];
+    
+        if (result[nextId]) {
+          if (cache[nextId] === prevId) {
+            console.log('FFFF')
+            result[nextId].repeat = true; // temp..
+          }
+          cache[nextId] = prevId
+          return;
+        }
+    
+        result[nextId] = {
+          odrinal: stepCount++,
+          label: node.label,
+          type: node.type,
+          value: node.value,
+          data: node.data,
+          steps: []
+        }
+    
+        Object.values(node.linesTo).forEach(line => {
+          result[nextId].steps.push(line.nodeId);
+          parse(line.nodeId, nextId);
+        });
+      }
+      parse(obj.initial);
+    
+      return result;
     }
   }
 }
@@ -120,9 +180,10 @@ export const _proxies = {
 }
 
 // custom methods
+/** Parse Mind Map data */
 JSON.stringifyMap = (obj, indent = 1) => {
   let cache = [];
-  const retVal = JSON.stringify(
+  const result = JSON.stringify(
     obj,
     (key, value) =>
       /^hitboxes$|^el$|^altClass$/.test(key) ? undefined :
@@ -134,257 +195,170 @@ JSON.stringifyMap = (obj, indent = 1) => {
     indent
   );
   cache = null;
-  return retVal;
-};
+  return result;
+}
 
-
-
-// dummy node data
+// default data object
 export let _data = {
-  nodes: {
-    ugn0: {
-      id: `ugn0`,
-      label: 'Email',
-      icon: 'src/assets/vector/files/nodes/email.svg',
-      h: 100,
-      w: 100,
-      y: 930,
-      x: 1371,
-      z: 50,
-      linesTo: {},
-      linesFrom: {}
-    }
-  },
+  count: 0,
+  initial: null,
+  nodes: {},
   lines: {}
 }
-let dummy = JSON.stringify({
-  "count": 20,
-  "nodes": {
-   "ugn0": {
-    "id": "ugn0",
-    "label": "Email",
-    "icon": "src/assets/vector/files/nodes/email.svg",
-    "h": 100,
-    "w": 100,
-    "y": 1039,
-    "x": 1324,
-    "z": 14,
-    "linesTo": {
-     "ugl4": {
-      "lineId": "ugl4",
-      "nodeId": "ugn2"
-     }
-    },
-    "linesFrom": {
-     "ugl6": {
-      "lineId": "ugl6",
-      "nodeId": "ugn3"
-     }
-    }
-   },
-   "ugn2": {
-    "label": "Survey",
-    "icon": "src/assets/vector/files/nodes/survey.svg",
-    "h": 100,
-    "w": 100,
-    "y": 809,
-    "x": 1513,
-    "z": 17,
-    "linesTo": {},
-    "linesFrom": {
-     "ugl4": {
-      "lineId": "ugl4",
-      "nodeId": "ugn0"
-     },
-     "ugl5": {
-      "lineId": "ugl5",
-      "nodeId": "ugn3"
-     }
-    },
-    "id": "ugn2"
-   },
-   "ugn3": {
-    "label": "Send email",
-    "icon": "src/assets/vector/files/nodes/email-send.svg",
-    "h": 100,
-    "w": 100,
-    "y": 817,
-    "x": 1061,
-    "z": 18,
-    "linesTo": {
-     "ugl5": {
-      "lineId": "ugl5",
-      "nodeId": "ugn2"
-     },
-     "ugl6": {
-      "lineId": "ugl6",
-      "nodeId": "ugn0"
-     }
-    },
-    "linesFrom": {},
-    "id": "ugn3"
-   }
-  },
-  "lines": {
-   "ugl4": {
-    "id": "ugl4",
-    "altClass": null,
-    "x": 1374,
-    "y": 1089,
-    "ex": 1563,
-    "ey": 859,
-    "rel": {
-     "x": -4,
-     "y": -74,
-     "ex": 74,
-     "ey": 0
-    },
-    "points": [
-     {
-      "id": "ugl4p8",
-      "x": 1359,
-      "y": 860
-     }
-    ],
-    "deleteBtn": {
-     "x": 1367,
-     "y": 985
-    },
-    "optionsBtn": {
-     "x": 1365,
-     "y": 945
-    },
-    "connFrom": "ugn0",
-    "connTo": "ugn2"
-   },
-   "ugl5": {
-    "id": "ugl5",
-    "altClass": null,
-    "x": 1111,
-    "y": 867,
-    "ex": 1563,
-    "ey": 859,
-    "rel": {
-     "x": 45,
-     "y": -59,
-     "ex": 49,
-     "ey": 56
-    },
-    "points": [
-     {
-      "id": "ugl5p7",
-      "x": 1325,
-      "y": 591
-     }
-    ],
-    "deleteBtn": {
-     "x": 1174,
-     "y": 784
-    },
-    "optionsBtn": {
-     "x": 1199,
-     "y": 752
-    },
-    "connTo": "ugn2",
-    "connFrom": "ugn3"
-   },
-   "ugl6": {
-    "id": "ugl6",
-    "altClass": null,
-    "x": 1111,
-    "y": 867,
-    "ex": 1374,
-    "ey": 1089,
-    "rel": {
-     "x": 75,
-     "y": 0,
-     "ex": 24,
-     "ey": 71
-    },
-    "points": [
-     {
-      "id": "ugl6p9",
-      "x": 1299,
-      "y": 867
-     }
-    ],
-    "deleteBtn": {
-     "x": 1216,
-     "y": 867
-    },
-    "optionsBtn": {
-     "x": 1256,
-     "y": 867
-    },
-    "connFrom": "ugn3",
-    "connTo": "ugn0"
-   }
-  }
- });
 
-_data = JSON.parse(dummy);
+// simulate api data
+_data = testdata;
 
+window.data = _data;
 
 // preset nodes
 export const _presetNodes = [
   {
+    id: null,
     label: 'Email',
     icon: 'src/assets/vector/files/nodes/email.svg',
+    type: 'setup',
+    action: 'SelectIssue',
+    value: 'My Issue',
+    data: {},
+    note: ''
   },
   {
-    label: 'Send',
-    icon: 'src/assets/vector/files/nodes/send.svg',
-  },
-  {
-    label: 'Opened mail',
-    icon: 'src/assets/vector/files/nodes/email-open.svg',
-  },
-  {
-    label: 'Time mod',
-    icon: 'src/assets/vector/files/nodes/time-mod.svg',
-  },
-  {
-    label: 'Condition',
-    icon: 'src/assets/vector/files/nodes/if-mod.svg',
-  },
-  {
-    label: 'Sms',
-    icon: 'src/assets/vector/files/nodes/sms.svg',
-  },
-  {
+    id: null,
     label: 'Event',
     icon: 'src/assets/vector/files/nodes/event.svg',
+    type: 'setup',
+    action: 'SelectEvent',
+    value: 'My Event ID',
+    data: {},
+    note: ''
   },
   {
+    id: null,
     label: 'Survey',
     icon: 'src/assets/vector/files/nodes/survey.svg',
+    type: 'setup',
+    action: 'SelectSurvey',
+    value: 'My Survey ID',
+    data: {},
+    note: ''
   },
   {
-    label: 'Pause',
-    icon: 'src/assets/vector/files/nodes/pause.svg',
+    id: null,
+    label: 'Form',
+    icon: 'src/assets/vector/files/nodes/form.svg',
+    type: 'setup',
+    action: 'SelectForm',
+    value: 'My Form ID',
+    data: {},
+    note: ''
   },
   {
-    label: 'Resume',
-    icon: 'src/assets/vector/files/nodes/resume.svg',
+    id: null,
+    label: 'Sms',
+    icon: 'src/assets/vector/files/nodes/sms.svg',
+    type: 'setup',
+    action: 'SelectMessage',
+    value: 'My Message ID',
+    data: {},
+    note: ''
   },
   {
-    label: 'Stop',
-    icon: 'src/assets/vector/files/nodes/stop.svg',
+    id: null,
+    label: 'Send',
+    icon: 'src/assets/vector/files/nodes/send.svg',
+    type: 'process',
+    action: 'SendAll',
+    data: {},
+    note: ''
   },
   {
-    label: 'Segments',
-    icon: 'src/assets/vector/files/nodes/segments.svg',
-  },
-  {
-    label: 'Bounced mail',
-    icon: 'src/assets/vector/files/nodes/email-bounce.svg',
-  },
-  {
-    label: 'Email error',
-    icon: 'src/assets/vector/files/nodes/email-error.svg',
-  },
-  {
+    id: null,
     label: 'Send email',
     icon: 'src/assets/vector/files/nodes/email-send.svg',
+    type: 'process',
+    action: 'SendEmail',
+    data: {},
+    note: ''
   },
+  {
+    id: null,
+    label: 'Segments',
+    icon: 'src/assets/vector/files/nodes/segments.svg',
+    type: 'process',
+    action: 'SegmentResult',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Opened email',
+    icon: 'src/assets/vector/files/nodes/email-open.svg',
+    type: 'state',
+    action: 'EmailOpened',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Bounced email',
+    icon: 'src/assets/vector/files/nodes/email-bounce.svg',
+    type: 'state',
+    action: 'EmailBounced',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Email error',
+    icon: 'src/assets/vector/files/nodes/email-error.svg',
+    type: 'state',
+    action: 'EmailGeneralError',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Time mod',
+    icon: 'src/assets/vector/files/nodes/time-mod.svg',
+    type: 'modifier',
+    action: 'TimeMod',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Condition',
+    icon: 'src/assets/vector/files/nodes/if-mod.svg',
+    type: 'modifier',
+    action: 'IfMod',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Pause',
+    icon: 'src/assets/vector/files/nodes/pause.svg',
+    type: 'modifier',
+    action: 'PauseMod',
+    data: {},
+    note: ''
+  },
+  {
+    label: 'Start',
+    icon: 'src/assets/vector/files/nodes/resume.svg',
+    type: 'modifier',
+    action: 'StartMod',
+    data: {},
+    note: ''
+  },
+  {
+    id: null,
+    label: 'Stop',
+    icon: 'src/assets/vector/files/nodes/stop.svg',
+    type: 'modifier',
+    action: 'StopMod',
+    data: {},
+    note: ''
+  }
 ];

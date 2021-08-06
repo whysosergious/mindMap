@@ -27,7 +27,8 @@ export default {
       nodeHooks: {
         updatePos: {}
       },
-      selected: _gc.selected
+      selected: _gc.selected,
+      data: _data
     }
   },
   template: await _gc.getTemplate('Viewport'),
@@ -39,6 +40,9 @@ export default {
     StepNode
   },
   methods: {
+    setInitialNode() {
+      return this.data.initial;
+    },
     addNode(node) {
       this.nodes[node.id] = node;
     },
@@ -52,7 +56,7 @@ export default {
         _data.lines[lineId] && delete _data.lines[lineId];
       });
       delete _data.nodes[node.id];
-      
+
       Object.keys(_data.nodes).length === 0 && _gc.dev.parseMMData()
 
       this.closeOpenWindows(null, true);
@@ -80,6 +84,7 @@ export default {
   beforeMount() {
   },
   mounted() {
+    _gc.sharedMethods.setInitialNode = this.setInitialNode;
     _gc.interface.nodeMenu = this.nodeMenu;
     _gc.interface.contextMenu = this.contextMenu;
     _gc.interface.ui.closeAllSoftWindows = this.closeOpenWindows;
@@ -134,7 +139,7 @@ export default {
           sox = (ev.x - vpw/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
           delta = ev.deltaY;
 
-      if (ev.ctrlKey) {
+      if (ev.ctrlKey || ev.altKey) {
         ev.preventDefault();
         ev.stopPropagation();
 

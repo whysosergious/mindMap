@@ -189,7 +189,7 @@ export default {
       line.rel.ey = 0;
       line.ex = ev.offsetX;
       line.ey = ev.offsetY;
-      console.log('ffsdsf')
+
       line.connFrom && _gc.sharedMethods.calcRelPoint(line);
       _gc.sharedMethods.calcRelRotation(line);
     },

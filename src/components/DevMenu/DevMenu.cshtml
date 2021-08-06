@@ -3,10 +3,10 @@
     <h4>Dev Menu</h4>
   </div>
   <div class="node-tabs brdr-xs-t">
-    <div class="tab full-hw fl-c active">
+    <div @click="displayData('mindmap')" class="tab full-hw fl-c" :class="activeTab === 'mindmap' && 'active'">
       <h4>Map data</h4>
     </div>
-    <div class="tab full-hw fl-c">
+    <div @click="displayData('actionmap')" class="tab full-hw fl-c" :class="activeTab === 'actionmap' && 'active'">
       <h4>Action data</h4>
     </div>
   </div>
