@@ -7,6 +7,12 @@ export default {
     node: Object,
     cz: Number
   },
+  setup() {
+    return {
+      col: 1,
+      row: 1
+    }
+  },
   data() {
     return {
       selected: _gc.selected,
@@ -17,6 +23,17 @@ export default {
   computed: {
   },
   methods: {
+    numberSlots() {
+      if (this.col * this.row > this.$props.node.gc * this.$props.node.gr) {
+        this.col = 1;
+        this.row = 1;
+      }
+      if (this.col > this.$props.node.gc) {
+        this.col = 1;
+        this.row++;
+      }
+      return `${ this.row }-${ this.col++ }`;
+    },
     handleStartResize(ev, origin) {
 
       // latest & original values: { coords, scroll offsets }
@@ -78,6 +95,10 @@ export default {
     },
   },
   beforeMount() {
+    _web.gn = {
+      c: 1,
+      r: 1
+    }
   },
   mounted() {
     _gc.selected = this.selected;
