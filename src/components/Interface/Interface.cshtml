@@ -1,5 +1,8 @@
 <section id="mmui">
   <div id="topbar" class="ui-wrapper full-h">
+    <div @click="$props.newMap" class="button fl-c">
+      <img src="src/assets/vector/files/ui/file.svg" alt="ui icon"/>
+    </div>
     <div class="button fl-c">
       <img src="src/assets/vector/files/ui/save.svg" alt="ui icon"/>
     </div>
@@ -56,12 +59,14 @@
   <div id="minimap" class="ui-wrapper full-h">
     
   </div>
-  <div id="detailswindow" class="ui-wrapper full-hw tr-tr" :class="!ui.activeMenu && 'slide-right'">
-    <dev-menu></dev-menu>
+  <div id="detailswindow" class="ui-wrapper full-hw tr-tr" :class="!ui.activeMenu && !ui.activeSoftMenu && 'slide-right'">
+    <transition :name="`${ !ui.activeMenu && !ui.activeSoftMenu ? 'component-fade' : 'no-trans' }`" mode="out-in">
+      <component :is="currentMenu"></component>
+    </transition>
   </div>
   <div id="bottombar" class="full-h">
-    <div @click="openDetailsWindow('dev')" class="ui-wrapper m-s-r">
-      <div class="button fl-c" :class="ui.activeMenu === 'dev' && 'active'"><h4>Dev</h4></div>
+    <div @click="openMenu('dev-menu')" class="ui-wrapper m-s-r">
+      <div class="button fl-c" :class="ui.activeMenu === 'dev-menu' && 'active'"><h4>Dev</h4></div>
     </div>
     <div class="ui-wrapper">
       <div class="button fl-c">

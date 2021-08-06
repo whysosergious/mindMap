@@ -3,10 +3,10 @@
     <h4>Node Menu</h4>
   </div>
   <div class="node-tabs brdr-xs-t">
-    <div class="tab full-hw fl-c active">
+    <div v-on:click="switchTab('automation')" class="tab full-hw fl-c" :class="activeTab === 'automation' && 'active'">
       <h4>Automation</h4>
     </div>
-    <div class="tab full-hw fl-c">
+    <div v-on:click="switchTab('web')" class="tab full-hw fl-c" :class="activeTab === 'web' && 'active'">
       <h4>Web</h4>
     </div>
   </div>
@@ -15,14 +15,28 @@
     <input type="text" placeholder="Search" />
   </div>
   <div class="node-grid brdr-xs-t">
-    <div class="node fl-c" v-for="(node, index) in presetNodes" :key="index">
-      <div class="draggable-icon-wrapper" @mousedown="(ev)=>pickNode(ev, node)">
-        <img class="draggable-icon" :src="node.icon" alt="node icon" draggable="false"/>
+    <template v-if="activeTab === 'automation'">
+      <div class="node mm-node fl-c" v-for="(node, index) in presetNodes" :key="index">
+        <div class="draggable-icon-wrapper" v-on:mousedown="(ev)=>pickNode(ev, node)">
+          <img class="draggable-icon" :src="node.icon" alt="node icon" draggable="false"/>
+        </div>
+        <h5>{{ node.label }}</h5>
       </div>
-      <h5>{{ node.label }}</h5>
-    </div>
+    </template>
+    <template v-if="activeTab === 'web'">
+      <div class="node web-node fl-c grid-span-2">
+        <div class="draggable-icon-wrapper fl-c full-hw" style="background-color: rgb(15, 15, 139)" v-on:mousedown="(ev)=>pickNode(ev, 'canvas')">
+          <h3 class="inner-text white">Canvas</h3>
+        </div>
+      </div>
+      <div class="node web-node fl-c grid-span-2">
+        <div class="draggable-icon-wrapper fl-c full-hw" style="background-color: rgb(66, 36, 48)" v-on:mousedown="(ev)=>pickNode(ev, 'section')">
+          <h3 class="inner-text white">Container</h3>
+        </div>
+      </div>
+    </template>
   </div>
   <div class="bottom-row brdr-xs-t fl-c">
-    <h4>Nothing here for now</h4>
+    <h4 class="btm-txt">Nothing here for now</h4>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { testdata } from "./data/ex.js";
 // global controller
 export const _gc = {
   dev: {},
+  initNodeMod: 0,
   templates: {},
   viewport: {
     perspective: 400,
@@ -29,7 +30,8 @@ export const _gc = {
   interface: {
     ui: {
       activeTool: 'cursor',
-      activeMenu: 'dev', // null this
+      activeMenu: null,
+      activeSoftMenu: null,
       closeAllSoftWindows: null
     },
     nodeMenu: {
@@ -117,7 +119,7 @@ export const _gc = {
           cache[nextId] = prevId
           return;
         }
-    
+
         result[nextId] = {
           odrinal: stepCount++,
           label: node.label,
@@ -132,6 +134,10 @@ export const _gc = {
           parse(line.nodeId, nextId);
         });
       }
+
+      if (!obj.initial)
+        return 'Set a starting point node by \nright-clicking and selecting "Make Initial"';
+
       parse(obj.initial);
     
       return result;
@@ -203,13 +209,22 @@ export let _data = {
   count: 0,
   initial: null,
   nodes: {},
-  lines: {}
+  lines: {},
+  note: ''
 }
 
+_gc.defaults.data = JSON.stringify(_data);
+
 // simulate api data
-_data = testdata;
+// _data = testdata;
 
 window.data = _data;
+
+// web components
+export let _web = {
+  count: 0,
+  nodes: {}
+}
 
 // preset nodes
 export const _presetNodes = [
@@ -269,6 +284,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/send.svg',
     type: 'process',
     action: 'SendAll',
+    value: null,
     data: {},
     note: ''
   },
@@ -278,6 +294,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/email-send.svg',
     type: 'process',
     action: 'SendEmail',
+    value: null,
     data: {},
     note: ''
   },
@@ -287,6 +304,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/segments.svg',
     type: 'process',
     action: 'SegmentResult',
+    value: null,
     data: {},
     note: ''
   },
@@ -296,6 +314,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/email-open.svg',
     type: 'state',
     action: 'EmailOpened',
+    value: null,
     data: {},
     note: ''
   },
@@ -305,6 +324,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/email-bounce.svg',
     type: 'state',
     action: 'EmailBounced',
+    value: null,
     data: {},
     note: ''
   },
@@ -314,6 +334,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/email-error.svg',
     type: 'state',
     action: 'EmailGeneralError',
+    value: null,
     data: {},
     note: ''
   },
@@ -323,6 +344,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/time-mod.svg',
     type: 'modifier',
     action: 'TimeMod',
+    value: null,
     data: {},
     note: ''
   },
@@ -332,6 +354,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/if-mod.svg',
     type: 'modifier',
     action: 'IfMod',
+    value: null,
     data: {},
     note: ''
   },
@@ -341,6 +364,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/pause.svg',
     type: 'modifier',
     action: 'PauseMod',
+    value: null,
     data: {},
     note: ''
   },
@@ -349,6 +373,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/resume.svg',
     type: 'modifier',
     action: 'StartMod',
+    value: null,
     data: {},
     note: ''
   },
@@ -358,6 +383,7 @@ export const _presetNodes = [
     icon: 'src/assets/vector/files/nodes/stop.svg',
     type: 'modifier',
     action: 'StopMod',
+    value: null,
     data: {},
     note: ''
   }

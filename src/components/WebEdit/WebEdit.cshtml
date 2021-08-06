@@ -1,0 +1,9 @@
+<div class="web-edit-container">
+  <template v-for="n in ($props.node.gr * $props.node.gc)" :key="n">
+    <div class="web-edit slot-box"></div>
+  </template>
+  <div class="web-edit border-box hr top"></div>
+  <div class="web-edit border-box vr right"></div>
+  <div v-on:mousedown.stop="(ev)=>handleStartResize(ev, 'btm')" class="web-edit border-box hr bottom"></div>
+  <div class="web-edit border-box vr left"></div>
+</div>

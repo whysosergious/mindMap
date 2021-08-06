@@ -1,4 +1,4 @@
-import { _gc, _data } from '/gc.js';
+import { _gc, _data, _web } from '/gc.js';
 
 // components
 import ContextMenu from '/src/components/ContextMenu/ContextMenu.js';
@@ -7,8 +7,12 @@ import Interface from '/src/components/Interface/Interface.js';
 import NodeLines from '/src/components/NodeLines/NodeLines.js';
 import StepNode from '/src/components/StepNode/StepNode.js';
 
+// web components
+import WebCanvas from '/src/components/WebCanvas/WebCanvas.js';
+
 /** Canvas component */
 export default {
+  template: await _gc.getTemplate('Viewport'),
   props: {
 
   },
@@ -24,27 +28,49 @@ export default {
       contextMenu: _gc.interface.contextMenu,
       nodeMenu: _gc.interface.nodeMenu,
       nodes: _data.nodes,
+      webNodes: _web.nodes,
       nodeHooks: {
         updatePos: {}
       },
       selected: _gc.selected,
-      data: _data
+      data: _data,
+      web: _web
     }
   },
-  template: await _gc.getTemplate('Viewport'),
   components: {
     ContextMenu,
     NodeMenu,
     Interface,
     NodeLines,
-    StepNode
+    StepNode,
+    WebCanvas
   },
   methods: {
+    newMap() {
+      Object.values(_data.nodes).forEach(node=>{
+        delete _data.nodes[node.id];
+      });
+      Object.values(_data.lines).forEach(line=>{
+        delete _data.lines[line.id];
+      });
+      _data.count = 1;
+      _data.initial = null;
+      _data.note = '';
+
+      this.$forceUpdate();
+    },
     setInitialNode() {
       return this.data.initial;
     },
-    addNode(node) {
-      this.nodes[node.id] = node;
+    addNode(node, ev) {
+      if (node.type === 'web-node') {
+        node.tag === 'canvas' && (this.webNodes[node.id] = node);
+        if (node.tag === 'section' && /webcan/.test(ev.target.id)) {
+          this.webNodes[ev.target.id].tree[node.id] = node;
+        }
+      } else {
+        this.nodes[node.id] = node;
+      }
     },
     deleteNode(node) {
       Object.values(node.linesFrom).forEach(({ lineId, nodeId }) => {
@@ -67,6 +93,12 @@ export default {
 
       this.contextMenu.show = false;
 
+      if (this.dc) {
+        this.nodeMenu.keep = false;
+        _gc.interface.ui.activeMenu = null;
+      }
+        
+
       if (!this.nodeMenu.keep) {
         this.nodeMenu.show = false;
         this.nodeMenu.x = 0;
@@ -76,6 +108,12 @@ export default {
       _gc.selected.el && _gc.selected.el.classList.remove('selected');
       _gc.selected.el = null;
       _gc.selected.node = null;
+      _gc.interface.ui.activeSoftMenu = null;
+
+      this.dc = true;
+      setTimeout(()=>{
+        this.dc = false;
+      }, 200);
     },
     startDraw(type) {
       console.log(type)
@@ -84,6 +122,15 @@ export default {
   beforeMount() {
   },
   mounted() {
+    // get user setting from local storage
+    let viewportOffset = JSON.parse(localStorage.getItem('ViewportOffset'));
+    if (viewportOffset) {
+      this.offset.scrY = viewportOffset.scrY;
+      this.offset.scrX = viewportOffset.scrX;
+      this.offset.canZ = viewportOffset.canZ;
+      canvas.style.transform = `translate3d(${ this.offset.scrX }px, ${ this.offset.scrY }px, ${ this.offset.canZ }px)`;
+    }
+
     _gc.sharedMethods.setInitialNode = this.setInitialNode;
     _gc.interface.nodeMenu = this.nodeMenu;
     _gc.interface.contextMenu = this.contextMenu;
@@ -133,7 +180,16 @@ export default {
     const { offset } = this;
     let mod;
     const handleNavigation = ev => {
-      this.closeOpenWindows(ev, true);
+      this.storeUserSettingsDelay && clearTimeout(this.storeUserSettingsDelay);
+      this.storeUserSettingsDelay = setTimeout(()=>{
+        localStorage.setItem('ViewportOffset', JSON.stringify(offset));
+      }, 3000);
+      this.contextMenu.show = false;
+      if (!this.nodeMenu.keep) {
+        this.nodeMenu.show = false;
+        this.nodeMenu.x = 0;
+        this.nodeMenu.y = 0;
+      }
 
       let soy = (ev.y - vph/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),
           sox = (ev.x - vpw/2) / (offset.canZ > 10 ? 1+offset.canZ/10 : 5),

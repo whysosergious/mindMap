@@ -1,0 +1,14 @@
+#contextmenu {
+  visibility: hidden;
+  position: fixed;
+  width: 200px;
+
+  transform: scale(.9);
+  opacity: 0;
+}
+
+#contextmenu.show {
+  visibility: visible;
+  transform: scale(1);
+  opacity: 1;
+}

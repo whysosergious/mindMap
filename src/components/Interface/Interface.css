@@ -117,3 +117,19 @@
   grid-column: right-column;
   justify-self: flex-end;
 }
+
+
+/* transitions */
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
+}
+
+.no-trans-enter-active, .no-trans-leave-active {
+  transition: none;
+}
+.no-trans-enter, .no-trans-leave-to {
+  opacity: 0;
+}

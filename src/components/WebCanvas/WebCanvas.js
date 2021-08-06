@@ -1,56 +1,25 @@
-import { _gc, _data, _proxies } from '/gc.js';
-// const { watchEffect } = Vue;
-
-// scoped styles
-// const scopedCSS = (id, vals) => `
-//   [${ id }] h3 { 
-//     font-size: ${ vals.fontSize }rem;
-//   }
-//   [${ id }].step-node { 
-//     background-color: ${ vals.bg };
-//   }`;
+import { _gc, _web } from '/gc.js';
 
 // components
-import EditFrame from '/src/components/EditFrame/EditFrame.js';
+import WebSection from '/src/components/WebSection/WebSection.js';
 
-
-/** Node component */
+/** Context menu component */
 export default {
+  template: await _gc.getTemplate('WebCanvas', true),
   props: {
     node: Object,
-    bg: String,
-    cz: Number,
-    hooks: Object,
-    initialNodeId: String
-  },
-  setup(props) {
-    // temp obj simulating fetched values
-
-    
-    // scoped css values
-    // const cssVals = {
-    //   fontSize: .8,
-    //   bg: props.bg
-    // }
-
-    return {
-      // meta
-      props,
-
-      // data
-      mod: () => 1 - ((props.node.z + props.cz ) / (_gc.viewport.perspective / 100) / 100), // adjustment modifier for 3d perspective
-
-      // css
-      // scopedCSS, cssVals
-    }
+    cz: Number
   },
   data() {
     return {
+      selected: _gc.selected,
+      mod: () => 1 - ((this.$props.node.z + this.$props.cz ) / (_gc.viewport.perspective / 100) / 100), // adjustment modifier for 3d perspective
     }
   },
-  template: await _gc.getTemplate('StepNode', true),
   components: {
-    EditFrame
+    WebSection
+  },
+  computed: {
   },
   methods: {
     handleStartResize(ev, origin) {
@@ -180,37 +149,9 @@ export default {
       node.y -= (lv.oy - ev.y)*mod - lv.y;
       node.x -= (lv.ox - ev.x)*mod - lv.x;
 
-      Object.values(this.$props.node.linesTo).forEach(({ lineId, nodeId }) => {
-        let line = _data.lines[lineId];
-
-        if (!line)
-          return;
-
-        line.lineTools();
-        line.y = node.y + node.h/2;
-        line.x = node.x + node.w/2;
-        line.connFrom && _gc.sharedMethods.calcRelPoint(line);
-        line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
-        line.points.length === 0 && _gc.sharedMethods.calcRelRotation(line);
-      });
-
-      Object.values(this.$props.node.linesFrom).forEach(({ lineId, nodeId }) => {
-        let line = _data.lines[lineId];
-
-        if (!line)
-          return;
-
-        line.lineTools();
-        line.ey = node.y + node.h/2;
-        line.ex = node.x + node.w/2;
-        line.connFrom && _gc.sharedMethods.calcRelPoint(line);
-        line.connTo && _gc.sharedMethods.calcRelEndPoint(line); 
-      });
-
       lv.y = (lv.oy - ev.y)*mod;
       lv.x = (lv.ox - ev.x)*mod;
-
-      // console.log('o ', node.x, node.y);
+      
       this.updatePos();
     },  
     handleRelease(ev) {
@@ -221,28 +162,6 @@ export default {
       node.y = ~~node.y;
       node.h = ~~node.h;
       node.w = ~~node.w;
-
-      Object.values(this.$props.node.linesTo).forEach(line => {
-        line = _data.lines[line.lineId];
-
-        if (!line)
-          return;
-
-        line.x = ~~line.x;
-        line.y = ~~line.y;
-        line.genHitboxes();
-      });
-
-      Object.values(this.$props.node.linesFrom).forEach(line => {
-        line = _data.lines[line.lineId];
-
-        if (!line)
-          return;
-
-        line.ex = ~~line.ex;
-        line.ey = ~~line.ey;
-        line.genHitboxes();
-      });
 
       let offY = this.lv.oy - ev.y,
         offX = this.lv.ox - ev.x;
@@ -258,26 +177,10 @@ export default {
     }
   },
   beforeMount() {
-    this.node.z = 75;
   },
   mounted() {
-    this.$props.hooks.updatePos = this.updatePos;
+    _gc.selected = this.selected;
     this.updatePos();
     this.updateSize();
-    this.$el.classList.add('transition-z');
-    this.$el.style.transitionDelay = `${ _gc.initNodeMod++/100 }s`;
-
-    setTimeout(()=>{
-      // this.node.z = Math.floor(Math.random()*20);
-      this.node.z = 4;
-      this.node.x = this.node.x;
-      this.node.y = this.node.y;
-      this.updatePos();
-      this.$el.addEventListener('transitionend', ()=>{
-        this.$el.classList.remove('transition-z');
-        this.$el.style.transitionDelay = '';
-      }, { once: true });
-    },10);
-    
   }
 }

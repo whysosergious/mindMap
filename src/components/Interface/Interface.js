@@ -2,18 +2,15 @@ import { _gc, _data, _proxies } from '/gc.js';
 
 // components
 import DevMenu from '/src/components/DevMenu/DevMenu.js';
+import EditorMenu from '/src/components/EditorMenu/EditorMenu.js';
 
 /** main UI component */
 export default {
   props: {
-
+    newMap: Function
   },
   data() {
-    let count = ++_data.count;
     return {
-      // meta
-      id: `gc${ count }`,
-      count,
 
       // data
       ui: _gc.interface.ui,
@@ -22,10 +19,13 @@ export default {
   },
   template: await _gc.getTemplate('Interface', true),
   components: {
-    DevMenu
+    DevMenu,
+    EditorMenu
   },
   computed: {
-    
+    currentMenu() {
+      return this.ui.activeSoftMenu || this.ui.activeMenu;
+    }
   },
   methods: {
     selectTool(tool) {
@@ -43,13 +43,20 @@ export default {
       _gc.interface.nodeMenu.x = 0;
       _gc.interface.nodeMenu.y = 0;
     },
-    openDetailsWindow(menu) {
+    openMenu(menu) {
+      _gc.interface.ui.closeAllSoftWindows(null, true);
+      // if (this.ui.activeSoftMenu && this.ui.activeMenu)
       this.ui.activeMenu = this.ui.activeMenu !== menu ? menu : null;
-    }
+    },
+    // openSoftMenu(menu) {
+    //   console.log('2')
+    //   this.ui.activeSoftMenu = menu;
+    //   this.lastOpenedMenu = this.ui.activeSoftMenu;
+    // }
   },
   beforeMount() {
   },
   mounted() {
-    // _gc.interface.ui = this.ui;
+    _gc.interface.ui = this.ui;
   }
 }

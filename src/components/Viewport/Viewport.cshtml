@@ -1,7 +1,7 @@
 <div id="viewport">
   <div id="canvas" @click.passive="closeOpenWindows">
     <node-lines @conn-line="startDraw"></node-lines>
-    <template v-for="(node, index) in nodes" :key="index">
+    <template v-for="(node, index) in nodes" :key="node.id">
       <step-node 
         :node="node"
         :cz="offset.canZ" 
@@ -11,8 +11,18 @@
         >
       </step-node>
     </template>
+    <template v-for="(node, index) in webNodes">
+      <web-canvas
+        :node="node"
+        :cz="offset.canZ"
+        >
+      </web-canvas>
+    </template>
   </div>
-  <interface></interface>
+  <interface
+    :newMap="newMap"
+    >
+  </interface>
   <node-menu 
     :show="nodeMenu.show" 
     :x="nodeMenu.x" 

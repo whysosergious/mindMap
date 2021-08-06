@@ -47,5 +47,5 @@
 }
 
 .step-node.transition-z {
-  transition: transform .4s ease-out;
+  transition: transform .75s ease;
 }

@@ -105,6 +105,9 @@
 .draggable-icon-wrapper {
   flex-grow: 0;
   flex-shrink: 0;
+}
+
+.draggable-icon-wrapper.mm-node {
   height: calc(var(--fr-size) * 2);
   width: calc(var(--fr-size) * 2);
 }
@@ -140,4 +143,26 @@
   transform: scale(1.34);
   /* transform: scale(1.15); */
   /* transform: scale(1); */
+}
+
+
+.web-node {
+  position: relative;
+  height: 10rem;
+  width: 10rem;
+  padding: .6rem;
+}
+
+.web-node .draggable-icon-wrapper {
+  height: 10rem;
+  width: 8rem;
+}
+
+.grid-span-2 {
+  grid-row: span 2;
+  grid-column: span 2;
+}
+
+.white {
+  color: white;
 }

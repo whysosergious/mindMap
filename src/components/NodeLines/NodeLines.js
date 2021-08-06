@@ -150,9 +150,9 @@ export default {
         line.y = _data.nodes[line.connFrom].y + _data.nodes[line.connFrom].h/2;
       }
 
-      line.genHitboxes();
       line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
       line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
+      line.genHitboxes();
     },
     deleteLine(id) {
       let line = this.lines[id];
@@ -206,6 +206,9 @@ export default {
     },
     deletePoint(line, index) {
       line.points.splice(index, 1);
+      line.connFrom && _gc.sharedMethods.calcRelPoint(line); 
+      line.connTo && _gc.sharedMethods.calcRelEndPoint(line);
+      _gc.sharedMethods.calcRelRotation(line); 
       line.genHitboxes();
     },
     initMovePoint(line, point) {

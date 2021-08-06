@@ -1,0 +1,10 @@
+<section class="web-section" v-on:mousedown.stop.prevent="handleGrab" :id="node.id">
+  <template v-for="(div, index) in node.tree" :key="div.id">
+    
+  </template>
+  <web-edit
+    :node="node"
+    :cz="$props.cz"
+    >
+  </web-edit>
+</section>

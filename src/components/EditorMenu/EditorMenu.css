@@ -1,0 +1,43 @@
+#editormenu {
+  display: grid;
+  position: relative;
+  grid-template-rows: [title-row] calc(var(--fr-size) / 2) [content-row] auto [bottom-row] calc(var(--fr-size) / 1.5);
+  height: 100%;
+  width: 100%;
+}
+
+.editor-content {
+  padding: .4rem .7rem 0 .7rem;
+}
+
+.info-text {
+  font-weight: 600;
+  font-size: .8rem;
+  color: rgb(107, 126, 120);
+  padding-right: 1rem;
+}
+
+.editor-content textarea {
+  font-size: .9rem;
+  color: rgb(65, 59, 59);
+  height: 7rem;
+  width: 100%;
+  margin-top: .3rem;
+  padding: 8px 8px 4px 8px;
+  resize: vertical;
+  border: solid 1px rgb(160, 178, 180);
+  border-radius: 4px;
+  outline: none;
+}
+
+.input-group input {
+  font-size: .9rem;
+  color: rgb(65, 59, 59);
+  height: 100%;
+  width: 100%;
+  margin-top: .3rem;
+  padding: 8px 8px 6px 8px;
+  border: solid 1px rgb(160, 178, 180);
+  border-radius: 4px;
+  outline: none;
+}

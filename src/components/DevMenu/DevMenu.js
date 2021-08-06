@@ -21,7 +21,7 @@ export default {
         this.parsedMMData = JSON.stringifyMap(this.mmData);
       else if (this.activeTab === 'actionmap')
         this.parsedMMData = _gc.sharedMethods.parseActionData(this.mmData);
-
+        
       return this.parsedMMData;
     },
     displayData(tab) {

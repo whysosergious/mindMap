@@ -1,17 +1,21 @@
 <svg @mousedown.left="startDraw" id="linecanvas" class="cover-canvas" fill="none" 
   version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
   <template v-for="(line, index) in lines" :key="index">
     <g class="node-path" :class="line.altClass" v-if="typeof line === 'object'">
       <path class="main-path" stroke="darkcyan" stroke-width="2" stroke-dasharray="7" :id="line.id" :d="`M ${ line.x } ${ line.y } m ${ line.rel.x } ${ line.rel.y } ${ line.vertex() } L ${ line.ex - line.rel.ex } ${ line.ey - line.rel.ey }`" />
+
       <g v-for="(hitbox, index) in line.hitboxes" :key="index">
         <circle class="hb circle" v-if="index !== 0" :cx="hitbox.x" :cy="hitbox.y" r="14" />
         <path class="hb path" @mousedown.left.stop="(ev)=>newPoint(ev, line, index)" :d="`M ${ hitbox.x } ${ hitbox.y } L ${ hitbox.ex } ${ hitbox.ey }`" />
       </g>
+
       <g class="path-ui">
         <g @mousedown.left.stop="moveStartPoint(line)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.x + line.rel.x }px, ${ line.y + line.rel.y }px, 0)`">
           <circle class="hvr-tgt" r="6" fill="#920072" />
           <circle class="hb circle" r="17"/>
         </g>
+
         <g @mousedown.left.stop="deleteLine(line.id)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.deleteBtn.x }px, ${ line.deleteBtn.y }px, 0)`">
           <circle class="hvr-tgt" r="7" fill="red" />
           <circle class="hb circle" r="14"/>
@@ -25,14 +29,18 @@
           </g>
         </template>
       </g>
+
       <g @mousedown.left.stop="moveEndPoint(line)" class="hvr-scale-xs" :style="`transform: translate3d(${ line.ex - line.rel.ex }px, ${ line.ey - line.rel.ey }px, 0)`">
+        
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="12" width="12" :x="-6" :y="-6" viewBox="0 0 60 60">
           <g class="hvr-tgt to-c">
             <path class="arrow" fill="darkcyan" :style="`transform: rotate(${ line.rel.ed }deg)`" d="M32.4,5h20.3c1.2,0,1.9,1.2,1.5,2.2L29.6,30l24.6,22.8c0.6,1-0.3,2.2-1.5,2.2H32.3c-0.6,0-1.2-0.3-1.5-0.9L5.6,30L30.9,5.9 C31.2,5.3,31.8,5,32.4,5z"/>
           </g>
         </svg>
+
         <circle class="hb circle" r="17"/>
       </g>
+
     </g>
   </template>
 </svg>

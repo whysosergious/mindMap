@@ -1,0 +1,9 @@
+<section class="web-canvas" v-on:mousedown.stop.prevent="handleGrab" :id="$props.node.id">
+  <template v-for="(secNode, index) in $props.node.tree" :key="secNode.id">
+    <web-section
+      :node="secNode"
+      :cz="$props.cz"
+      >
+    </web-section>
+  </template>
+</section>
